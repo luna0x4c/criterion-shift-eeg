@@ -1,0 +1,15 @@
+"task","cond","is_correct","mean","sd","nsub"
+"Baseline","Neutral","Incorrect",-0.271297854740527,3.2618974834143,58
+"Baseline","Neutral","Correct",0.299974785599775,3.480991131481,58
+"FPF","Con","Incorrect",0.863566415540507,3.96899383036119,58
+"FPF","Con","Correct",2.41895031472572,4.15983786624767,58
+"FPF","Lib","Incorrect",0.847575663932329,4.11170384422848,58
+"FPF","Lib","Correct",2.14270011573,4.3103990466617,58
+"Strategic (true cue)","Con","Incorrect",1.89876469182479,3.64292528225046,25
+"Strategic (true cue)","Con","Correct",2.96149180154549,3.82655879737721,25
+"Strategic (true cue)","Lib","Incorrect",3.11064849406386,3.57547024295633,25
+"Strategic (true cue)","Lib","Correct",3.82444920752628,4.0867689111126,25
+"Strategic (reversed cue)","Con","Incorrect",2.46953993419238,3.63013328787717,33
+"Strategic (reversed cue)","Con","Correct",2.96619023967433,3.94861655485041,33
+"Strategic (reversed cue)","Lib","Incorrect",1.6080495433833,3.33314785397621,33
+"Strategic (reversed cue)","Lib","Correct",2.04669447846413,3.38256588462266,33

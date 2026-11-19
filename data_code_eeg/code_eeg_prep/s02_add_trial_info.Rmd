@@ -1,0 +1,475 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-05-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(foreign)
+library(tidyverse)
+library(ggplot2)
+library(conflicted)
+
+library(R.matlab)
+library(eegUtils)
+
+set.seed(5183)
+
+select = dplyr::select
+filter = dplyr::filter
+recode = dplyr::recode
+rename = dplyr::rename
+lag    = dplyr::lag 
+
+`%nin%` = Negate(`%in%`)
+
+# ==============================================
+source_dir = "/Volumes/toshiba/eeg_data_backup/_03_ica_weights/"
+# USING OLD PLACEHOLDER FILES, NEED TO GET UP TO ICA WEIGHTS AGAIN TO GET CLEAN EVENTS
+# ==============================================
+
+
+urevent_1024_dir = "/Volumes/toshiba/eeg_data_backup/01_urevent_1024/"
+urevent_256_dir  = "/Volumes/toshiba/eeg_data_backup/01_urevent_256/"
+
+clean_urevent_dir = "/Volumes/toshiba/eeg_data_backup/01_urevent_fixed/"
+
+trials_dir = "/Users/lunarneko/Library/Mobile Documents/com~apple~CloudDocs/School/[Lab]/False feedback/false_feed_eeg/data_beh/data_clean/"
+
+```
+
+
+```{r sanity check: total number of events, eval=FALSE}
+# check to make sure 1024 and 256 have identical events
+urevent_1024 <- urevent_256 <- NULL
+
+for (sub1 in 1:length(list.files(urevent_1024_dir))) {
+  filename = list.files(urevent_1024_dir)[sub1]
+  filename_long = paste0(urevent_1024_dir,filename)
+  df = read.csv(filename_long)
+  sub = str_remove(filename,"_urevent.csv")
+  df$subID = sub
+  urevent_1024[[sub1]] = df
+}
+
+for (sub2 in 1:length(list.files(urevent_256_dir))) {
+  filename = list.files(urevent_256_dir)[sub2]
+  filename_long = paste0(urevent_256_dir,filename)
+  df = read.csv(filename_long)
+  sub = str_remove(filename,"_urevent.csv")
+  df$subID = sub
+  urevent_256[[sub2]] = df
+}
+
+# if both lists are the same length & all filenames match, pass
+ifelse(sub1==sub2 & 
+         sum(list.files(urevent_1024_dir)==list.files(urevent_256_dir)) == length(list.files(urevent_256_dir)),
+       "Total subs correct", 
+       stop("TOTAL SUBS DO NOT MATCH!"))
+
+# continue with checking actual dfs
+for (sub in 1:length(urevent_1024)) {
+  
+  df_1024 = urevent_1024[[sub]]
+  df_256  = urevent_256[[sub]]
+  if (all(df_1024$subID==df_256$subID) & all(df_1024$type==df_256$type)) {
+    next
+  } else {
+    warning_msg = paste0(df_1024$subID[1], " / ", df_256$subID[1], "NOT AN EXACT MATCH")
+    warning(warning_msg)
+  }
+  # no warnings = all good
+}
+
+
+```
+
+
+
+```{r}
+# fix events using full info from urevents, then merge into events using event sequence
+#path = paste0(paste0(source_dir,"sub11.set"))
+#eeg = import_set(path)   # does not work with these files 
+
+# STEPS:
+#   - label 1:nrow() urevent 
+#   - remove invalid codes
+#   - label i for study and test 
+#   - label study 1,2,3
+#   - task: true_feed, prob, false_feed 
+#   - use i + behavioral data???? to label test lib/con conditions for each test
+#   - use trig to label event type (old vs new, resptype, etc)
+
+
+# NEED FROM BEHAVIORAL DATA:
+#   sub   study   task_order    task_name   cond_order    cond_name
+#   sub11 1       1             true_feed   1             none
+#   sub11 1       1             true_feed   2             none
+#   sub11 2       2             strategic   1             lib
+#   sub11 2       2             strategic   2             con
+#   sub11 3       3             false_feed  1             con
+#   sub11 3       3             false_feed  2             lib
+
+```
+
+
+```{r import subinfo}
+# get list of valid EEG subj - LIST ONLY, not actual EEG data
+# NOTE this only goes up to 66
+# PLACEHOLDER !!!!! PENDING ROUND 2 OF ICA
+#files = list.files(source_dir) 
+#sublist = str_extract_all(files,"[0-9][0-9]") %>% unique() %>% unlist()
+
+sublist = c("78","79")
+
+# load subinfo for marking task cond
+subinfo = read.csv("./subinfo_for_eeg.csv") %>% 
+  filter(sub %in% sublist)  %>% 
+  mutate(sub = paste0("sub",as.character(sub))) %>% 
+  rename(subID = sub)
+
+# import valid trigger code values 
+valid_codes = read.csv("./valid_codes.csv") %>% select(-notes)
+
+```
+
+
+
+```{r clean events}
+
+# SPECIAL NOTE:
+# sub24 recorded "flushing" trig codes (1,2,4,8,16 etc), real data starts 185th row [everything before is marked as invalid]
+# sub66 missing 1 trial in true_feed block 1 (trial 83, skipped in this data) due to pause/unpause [BUT I HIT PAUSE ON EEG RECORDING WHICH IS WHY THE EVENTS THEMSELVES ARE MISSING AND RESP RT WAS INCORRECT]
+
+urevents_clean_dflist = NULL
+
+for (s in 1:nrow(subinfo)) {
+  
+  curr_sub = subinfo$subID[s]
+  #curr_sub = "sub66"
+  
+  # subinfo for task cond 
+  this_sub_info = subinfo %>% filter(subID == curr_sub) %>% select(-session_time)
+  
+  # load events
+  path_all_events   = paste0(urevent_256_dir,curr_sub,"_urevent.csv")
+
+  #events = read.csv(path_clean_events) %>% 
+  #  mutate(subID = curr_sub)
+  
+  # -2048 to convert to actual trig code values
+  # do not filter OUT invalid codes yet 
+  urevents_raw = read.csv(path_all_events) %>% 
+    mutate(subID = curr_sub,
+           urevent = 1:nrow(.),
+           latency_s = round((latency-1)/256,1),
+           type = type-2048#,
+           #type = as.character(type)
+    ) 
+  
+  #urevents_raw %>% filter(type %nin% valid_codes$trig_code)  # check for invalid codes
+  
+  urevents =
+    # get trig code info
+    merge(urevents_raw, valid_codes, by.x="type", by.y="trig_code", all.x=TRUE) %>% 
+    arrange(urevent) 
+  
+  # mark i_trial using study_stim / test_stim as benchmark
+  i_trial = 0
+  i_trial_study <- i_trial_test <- 1
+  i=0
+  for (i in 1:nrow(urevents)) {
+    
+    # mark invalid rows
+    if (urevents$type[i] %nin% valid_codes$trig_code) {
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    } else if (curr_sub == "sub20" & i < 86) {
+      # special treatment for subj who had flushing codes recorded
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    } else if (curr_sub == "sub23" & i < 126) {
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    } else if (curr_sub == "sub24" & i < 185) {
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    } else if (curr_sub == "sub25" & i < 135) {
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    } else if (curr_sub == "sub26" & i < 87) {
+      urevents$trig_type[i] = "invalid"
+      urevents$task[i] = ""
+      urevents$epoch_type[i] = "invalid"
+    }
+    
+    # fix missing 99[space]
+    if (i>1 & urevents$trig_type[i] == "ins_text_stim") {
+      if (urevents$trig_type[i-1] == "ins_text_stim") {
+        urevents$trig_type[i] = "space"
+        urevents$type[i] = 99
+      }
+    }
+    
+    # get trial number using benchmark events (stim onset)
+    if (urevents$epoch_type[i] == "study_stim") {
+      i_trial = i_trial_study
+      i_trial_study = i_trial_study + 1  # ready for next trial
+      # reset to 1 if after end of list
+      if (urevents$task[i] == "practice" & i_trial_study == 6) {
+        i_trial_study = 1
+      } else if (urevents$task[i] %in% c("true_feed","strategic","false_feed") & i_trial_study == 101) {
+        i_trial_study = 1
+      }
+    } else if (urevents$epoch_type[i] == "test_stim") {
+      i_trial = i_trial_test 
+      i_trial_test = i_trial_test + 1
+      if (urevents$task[i] == "practice" & i_trial_test == 11) {
+        i_trial_test = 1  # reset to 1 after prac
+      } else if (curr_sub == "sub66" & urevents$task[i] == "true_feed" & i_trial_test == 83) {
+        i_trial_test = 84 # sub66 true_feed test1 REMOVE TRIAL 83-84 IN ANALYSIS [paused+unpaused to switch out battery]
+        # RESP MATCHES 84; both 83 and 84 stim are OLD
+      } else if (urevents$task[i] %in% c("true_feed","strategic","false_feed") & i_trial_test == 201) {
+        i_trial_test = 1  # reset to 1 after real test
+      }
+    } else {
+      i_trial = NA
+    }
+    
+    urevents$i_trial[i] = i_trial
+    
+    # mark test block 1 vs 2
+    if (urevents$task[i] != "practice" & urevents$epoch_type[i] == "test_stim" & urevents$i_trial[i] <= 100) {
+      urevents$test_block[i] = 1
+    } else if (urevents$task[i] != "practice" & urevents$epoch_type[i] == "test_stim" & urevents$i_trial[i] > 100) {
+      urevents$test_block[i] = 2
+    } else {
+      urevents$test_block[i] = NA
+    }
+    
+    if (urevents$epoch_type[i] == "test_stim" & urevents$i_trial[i]>100) {
+      if (urevents$trig_type[i-3]=="ins_text_stim") {
+        urevents$test_block[i] = 2
+      }
+    }
+    
+    # repeat trial info [i_trial, task, test_block] for surrounding events:
+    # study: i-2 = blank, i-1 = fixcross, i = stim
+    # test: i-2=blank, i-1=fixcross, i=stim, i+1=resp, blank [NO TRIGGER SENT], i+2=feed, i+3=blank
+    
+    if (urevents$epoch_type[i] == "study_stim") {
+      urevents$i_trial[i-2] <- urevents$i_trial[i-1] <- i_trial
+      urevents$task[i-2]    <- urevents$task[i-1]    <- urevents$task[i]
+      # no test_block
+    } else if (urevents$epoch_type[i] == "test_stim") {
+      # i cannot modify future rows so i- and i+ need to be done separately
+      urevents$i_trial[i-2] <- urevents$i_trial[i-1] <- i_trial
+      urevents$task[i-2]    <- urevents$task[i-1]    <- urevents$task[i]
+      urevents$test_block[i-2] <- urevents$test_block[i-1] <- urevents$test_block[i]
+      # handling resp and feed separately also fixes missing resp trig (sometimes a trial has 6 trig [missing resp.key] instead of 5)
+    } else if (urevents$epoch_type[i] == "resp") {
+      # stim+1
+      urevents$i_trial[i]    <- urevents$i_trial[i-1]
+      urevents$task[i]       <- urevents$task[i-1]
+      urevents$test_block[i] <- urevents$test_block[i-1]
+    } else if (urevents$epoch_type[i] == "feed") {
+      # stim+2
+      urevents$i_trial[i]    <- urevents$i_trial[i-2]
+      urevents$task[i]       <- urevents$task[i-2]
+      urevents$test_block[i] <- urevents$test_block[i-2]
+    } else if (i>=2 & urevents$trig_type[i] == "blank_onset") {
+      # stim+3
+      # get the blank AFTER feed 
+      # can handle missing resp because there are enough events in the same trial before resp [e.g. if missing a resp, i-3 will reach fixcross instead of test_stim]
+      if (urevents$epoch_type[i-1] == "feed") {
+        urevents$i_trial[i]    <- urevents$i_trial[i-3]
+        urevents$task[i]       <- urevents$task[i-3]
+        urevents$test_block[i] <- urevents$test_block[i-3]
+      }
+      
+    }
+    
+  }
+  
+  # mark test cond using subinfo 
+  urevents_fixed = urevents %>% 
+    merge(this_sub_info, all.x=TRUE) %>% 
+    mutate(durr = latency_s - dplyr::lag(latency_s,1),
+           resp_rt = case_when(epoch_type=="resp" ~ latency_s - dplyr::lag(latency_s))) %>% 
+    mutate(test_cond = case_when(task=="strategic"  & !is.na(test_block) & i_trial <=100 ~ strategic_cond_1,
+                                 task=="strategic"  & !is.na(test_block) & i_trial >=101 ~ strategic_cond_2,
+                                 task=="false_feed" & !is.na(test_block) & i_trial <=100 ~ false_feed_cond_1,
+                                 task=="false_feed" & !is.na(test_block) & i_trial >=101 ~ false_feed_cond_2)
+    )  %>% 
+    select(-c(task_0,task_1,task_2,strategic_cond_1,strategic_cond_2,false_feed_cond_1,false_feed_cond_2)) %>% 
+    relocate(c(i_trial,test_cond,test_block),.after=epoch_type)
+  
+  # put in dflist 
+  urevents_clean_dflist[[s]] = urevents_fixed
+  names(urevents_clean_dflist)[s] = curr_sub
+  
+  # write individual csv
+  write.csv(urevents_fixed, paste0(clean_urevent_dir,curr_sub,"_urevent.csv"),row.names=FALSE)
+  
+  message(curr_sub)
+  
+}
+
+
+length(urevents_clean_dflist)
+
+```
+
+
+
+```{r sanity check: i_trial, eval=FALSE}
+
+# verify that all 3 tasks have 200 trials each
+#urevents %>% filter(!is.na(test_block)) %>%  count(task,i_trial) %>% count(task)
+
+# check all subs
+n_check_i_trial = 0   # total number of subs
+for (sss in 1:length(urevents_clean_dflist)) {
+  
+  df = urevents_clean_dflist[[sss]]
+  
+  if (sss==1 & n_check_i_trial >0) {
+    n_check_i_trial = 0
+  }
+  
+  sub = df$subID[1]
+  check_i_trial = df %>% filter(!is.na(test_block)) %>%  
+    count(task,i_trial) %>% count(task)
+  #check_i_trial = df %>% filter(epoch_type=="test_stim", task!="practice") %>%  
+  #  count(task,i_trial) %>% count(task)
+  
+  # if all three tasks have 200 test trials, ok  
+  if (check_i_trial$n[1]==200 & check_i_trial$n[2]==200 & check_i_trial$n[3]==200) {
+    n_check_i_trial = n_check_i_trial+1
+    next 
+  } else {
+    warning(paste0(sub," incorrect trial numbers, i=", sss," \n"))
+    # sub66 is missing 1 trial in true_feed test 1, everyone else should have all trials
+  }
+  
+}
+
+message("N of subs passed trial number check: ",n_check_i_trial)
+if (n_check_i_trial == sss) {
+  message("ALL PASSED, NO MISSING TRIALS")
+}
+
+```
+
+
+
+```{r import trial info}
+clean_urevent_dir
+trials_dir
+
+clean_urevent_list = list.files(clean_urevent_dir)
+trials_list = list.files(trials_dir)
+# these two do not (should not) have the same length
+
+urevents_complete_dir = "/Volumes/toshiba/eeg_data_backup/01_urevent_complete/"
+
+urevents_with_trial_info = NULL
+
+new_eeg_sub_list = c("sub78","sub79")   # UPDATE NEW SUBS
+
+for (u in 1:length(clean_urevent_list)) {
+  # ONLY include valid eeg sub
+  
+  eeg_sub = str_remove(clean_urevent_list[u],"_urevent.csv")  
+  #eeg_sub = "sub71"
+  if (eeg_sub %nin% new_eeg_sub_list) {
+    next
+  }
+
+  # load fixed urevents
+  urevents_path = paste0(clean_urevent_dir,clean_urevent_list[u])
+  
+  urevents_fixed_loaded = read.csv(urevents_path) %>% 
+    unite(mergeID,c(subID,task,test_block,i_trial),sep=" ",remove=FALSE,na.rm=TRUE) %>% 
+    # remove=F: do not remove original cols
+    # na.rm=T:  do not paste NAs into new string
+    mutate(mergeID = case_when(task %nin% c("true_feed","strategic","false_feed") | is.na(test_block) ~ NA,
+                               TRUE ~ mergeID))
+  
+  total_events = nrow(urevents_fixed_loaded)
+  
+  # find trial info to load for subID in the list
+  for (t in 1:length(trials_list)) {
+    trials_path = paste0(trials_dir,trials_list[t])
+    
+    if (str_detect(trials_path, "NO_EEG")) {
+      next  # skip if no eeg data
+    }
+    
+    beh_sub = str_remove(trials_list[t],"_trials.csv") 
+    
+    if (nchar(beh_sub) != 5) {
+      stop("CHECK TRIALS FILE NAME")  # check if file name is not in subxx format 
+    }
+    
+    if (beh_sub == eeg_sub) {
+      
+      message(paste0("MERGING ",eeg_sub, " ",beh_sub))
+      
+      beh_trials = read.csv(trials_path) %>% 
+        mutate(subID = beh_sub) %>% 
+        rename(task=curr_task) %>% 
+        select(-c(participant,img_start,img_end,stim,stim_img,matches("keys"))) %>% 
+        unite(mergeID,c(subID,task,test_block,i_trial),sep=" ",remove=FALSE,na.rm=TRUE) 
+      
+      if ("X" %in% c(names(beh_trials))) {
+        beh_trials = beh_trials %>% select(-contains("X"))
+      }
+      
+      urevents_complete = merge(urevents_fixed_loaded,beh_trials, 
+                                all.x=TRUE   # KEEP ALL UREVENTS!!!
+                                ) %>% 
+        arrange(urevent) %>% 
+        select(-mergeID) %>% 
+        # mark potential boundary points 
+        mutate(boundary_time = case_when(i_trial==1   & epoch_type=="study_stim" ~ latency_s - 0.5,  # study start
+                                         i_trial==1   & epoch_type=="test_stim"  ~ latency_s - 0.5,  # test block 1 start
+                                         i_trial==101 & epoch_type=="test_stim"  ~ latency_s - 0.5,  # test block 2 start
+                                         
+                                         i_trial==100 & epoch_type=="study_stim" ~ latency_s + 0.2,   # study end
+                                         i_trial==100 & epoch_type=="feed" ~ latency_s + 0.5,        # test block 1 end
+                                         i_trial==200 & epoch_type=="feed" ~ latency_s + 0.5,        # test block 2 end
+                                         
+                                         TRUE ~ NA)) %>% 
+        mutate(boundary_time = ifelse(task=="practice", NA, boundary_time)) %>% 
+        select(subID,type,urevent,trig_type,epoch_type,task,test_block,test_cond,i_trial,
+               latency,latency_s,boundary_time,everything())    # reorder cols
+      
+      
+      if (nrow(urevents_complete) != total_events) {
+        stop("NUMBER OF EVENTS DOES NOT MATCH")
+      }
+    }
+    
+  }
+  
+  urevents_with_trial_info[[u]] = urevents_complete
+  names(urevents_with_trial_info)[u] = eeg_sub
+  
+  # export
+  write.csv(urevents_complete,paste0(urevents_complete_dir,eeg_sub,"_urevent_complete.csv"),row.names = FALSE)
+  
+}
+
+length(urevents_with_trial_info)
+urevents_complete %>% count(epoch_type,boundary_time)
+
+```
+

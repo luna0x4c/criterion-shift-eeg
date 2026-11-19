@@ -1,0 +1,1189 @@
+---
+title: "Plot ERP amplitudes"
+output: 
+  html_document:
+    toc: true
+    toc_float: true 
+    df_print: paged 
+author: Luna Li | luna.0x4c@gmail.com
+---
+
+**Last updated: `r Sys.Date()`**   
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+
+library(foreign)
+library(openxlsx)
+library(readxl)
+library(tidyverse)
+library(data.table)    #fread
+library(dplyr)
+library(stringr)
+library(stringi)
+library(vctrs)
+library(pander)
+library(ggplot2)
+library(ggrepel)
+library(ggdist)
+library(ggforce)
+library(ggpubr)  # pull legend
+library(ggh4x)   # nested panels
+library(lm.beta)
+library(emmeans)
+library(lmerTest)
+library(cocor)
+library(grid)    # pull fig size
+library(gridExtra)
+library(cowplot)
+library(patchwork)
+library(glue)    # include variables in string
+
+set.seed(5183)
+
+mutate = dplyr::mutate
+select = dplyr::select
+recode = dplyr::recode
+rename = dplyr::rename
+
+`%nin%` = Negate(`%in%`)
+
+today = Sys.Date()
+
+#library(eegUtils) 
+library(RColorBrewer)
+
+minus = "\u2212"
+Delta = "\u0394"
+# use `glue()` to stitch text together
+
+save_des=F  # export des tables
+save_fig=T  
+# save=F
+```
+
+
+
+# load ERP data 
+
+```{r load csv, message=FALSE}
+#dir = "/Volumes/toshiba/eeg_data_backup/10_erp_mean"
+dir = "/Users/lunarneko/Desktop/10_erp_mean"
+
+erp_list = list.files(path=paste0(dir),pattern="*.csv",full.names = TRUE)
+
+erp = NULL
+
+for (i in 1:3) {
+  filename = erp_list[i]
+  
+  erp[[i]] = read.csv(erp_list[i]) 
+  
+  if (str_detect(filename,"teststim")) {
+    names(erp)[i] = "stim"        # `is_old`
+  } else if (str_detect(filename,"resp")) {
+    names(erp)[i] = "resp"        # `is_correct`
+  } else if (str_detect(filename,"feed")) {
+    names(erp)[i] = "feed"        # `trial_is_fpf`
+  } else {stop("Check file names")} 
+  
+  # make sure no subj missing 
+  if (n_distinct(erp[[i]]$sub) != 58) {
+    stop("Check N")
+  }
+  
+  # make sure no cue group missing
+  if (any(is.na(erp[[i]]$cue_flip))) {
+    stop("Check cue_flip")
+  }
+  
+}
+
+x1 = c("feed","resp","stim")
+x2 = names(erp)
+if (!identical(x1,x2)) {
+  stop("Check df names in `erp`")
+} else {
+  message("Success! df names match, ok to proceed")
+}
+
+valid_eeg_sub = data.frame(sub = unique(erp[[1]]$sub)) %>% mutate(has_eeg = TRUE)
+nrow(valid_eeg_sub)   # valid n=58
+
+# n per cue group: 0=true, 1=reversed
+erp[[1]] %>% distinct(sub, cue_flip) %>% count(cue_flip)  # n=25 true, n=33 rev   
+```
+
+
+# erp components info   
+```{r list of erp info}
+erp_info = tribble(
+  ~erp_name, ~df_type, ~roi,                ~erp_win, 
+  "FN400",   "stim",   c("Fz","FCz","Cz"),  c(300,500),  
+  "LPC",     "stim",   c("P3","P4"),        c(600,800),  
+  #"LPN",     "stim",   c("Pz","P3","P4"),   c(900,1100), 
+  #"pre-resp","resp",   c("FCz"),            c(-200,0),
+  "ERN",     "resp",   c("Cz","FCz"),       c(0,150),
+  "FRN",     "feed",   c("Cz","FCz"),       c(250,375), 
+  "P3",      "feed",   c("Pz","CPz"),       c(400,500)
+)
+
+min_n = 3
+
+source("plot_erp.R")
+source("plot_diff.R")
+
+```
+
+
+# plot erpwave/erpamp by batch
+**DEFAULT: grouped down to `resptype`; can combine cells later**
+```{r prep/plot all erpwave & erpamp, base df}
+
+i=0
+save=T
+all_amps_list <- mean_amps_list <- NULL
+erpwave_list <- erpamp_list <- diffwave_list <- diffamp_list <- list()
+
+for (i in 1:nrow(erp_info)) { 
+  
+  df_type = erp_info$df_type[i]
+  print(df_type)
+  roi = erp_info$roi[i][[1]]
+  erp_win = erp_info$erp_win[i][[1]]  # make sure this is numeric 
+  
+  curr_erp = erp_info$erp_name[i]
+  print(curr_erp)
+  
+  df = erp[[df_type]]
+  
+  if (df_type=="feed") {
+    df = df %>% filter(task!="strategic")  # text not formatted yet
+  }
+  
+  # full epoch, subj x cell timepoint -> grand average erpwave
+  all_amp_all_cells  = prep_erp_cells(df=df, df_type=df_type, chanlist=roi, erp_win=NULL,    avg=FALSE, save=save) 
+  # erp window mean, subj x cell      -> grand average erpamp by cell
+  mean_amp_all_cells = prep_erp_cells(df=df, df_type=df_type, chanlist=roi, erp_win=erp_win, avg=TRUE,  save=save) 
+  # keep these in case collapsing across cells for diffwave/diffamp 
+  
+  # drop sparse cells
+  # use these for resptype model/fig 
+  all_amp_valid_cells  = all_amp_all_cells  %>% filter(cell_ntrials >= min_n)
+  mean_amp_valid_cells = mean_amp_all_cells %>% filter(cell_ntrials >= min_n) 
+  
+  # tag df with additional info 
+  all_amps_list[[i]]  <- all_amp_all_cells
+  mean_amps_list[[i]] <- mean_amp_all_cells
+  names(all_amps_list)[i] = curr_erp
+  names(mean_amps_list)[i] = curr_erp
+  
+  # erpwave
+  erpwave_df  = prep_erp_wave(all_amp_valid_cells)
+  erpwave_list[[i]] <- plot_erp_wave(erpwave_df, erp_win=erp_win, export_option="no legend", save=save)
+  erpwave_fig = erpwave_list[[i]]
+  
+  # erpamp - descriptive fig with weighted mean/SE
+  erpamp_df  = prep_erp_amp(mean_amp_valid_cells)
+  erpamp_list[[i]] <- plot_erp_amp(erpamp_df, erp_win=erp_win, layout="panel", export_option="no legend", save=save)
+  erpamp_fig = erpamp_list[[i]]
+  
+  # save name for figs
+  names(erpwave_list)[i] = curr_erp
+  names(erpamp_list)[i]  = curr_erp
+  
+  # export legend separately, once per epoch type
+  # stim/resp should be identical; feed should have 6 resptype instead of 4 
+  if (curr_erp %in% c("FN400","ERN","FRN")) {
+    plot_erp_wave(erpwave_df, erp_win=erp_win, export_option="legend only", save=save)
+    # add 1in padding for feed amp
+    if (df_type=="feed") {width=4} else (width=NULL)
+    plot_erp_amp(erpamp_df, erp_win=erp_win, layout="column", export_option="legend only", save=save,width=width)
+  }
+  
+  # erpamp - lmer-based amp ~ taskcond x resptype contrasts
+  #erpamp_lmer = test_amp_lmer(mean_amp_valid_cells, save=save)  # ignore rank dificient warning from empty cells
+  
+}
+
+
+names(all_amps_list)
+names(mean_amps_list)
+names(erpwave_list)
+names(erpamp_list)
+
+```
+## recode 
+```{r recode function}
+# is_correct
+# is_criterr
+# is_old
+# say_old
+# is_fpf 
+
+# HARD CODED batch recoding for all dfs
+recode_levels = function(df) {
+  
+  df_type = unique(df$df_type)
+  
+  newdf = df %>% 
+    mutate(
+      # incorrect - correct
+      is_correct = case_when(resptype %in% c("Hit","CR")  ~ "Correct",
+                             resptype %in% c("FA","Miss") ~ "Incorrect",
+                             .default = NA),
+      # congruent vs opposite error to bias manipulation; baseline are neutral errors
+      is_criterr = case_when(cond=="Lib" & resptype=="FA"    ~ "Congruent",
+                             cond=="Con" & resptype=="Miss"  ~ "Congruent",
+                             cond=="Lib" & resptype=="Miss"  ~ "Incongruent",
+                             cond=="Con" & resptype=="FA"    ~ "Incongruent",
+                             cond=="Neutral" & resptype %in% c("FA","Miss") ~ "Neutral", 
+                             resptype %in% c("Hit","CR") ~ "Correct",
+                             .default = NA),
+      # item status
+      is_old = case_when(resptype %in% c("Hit","Miss") ~ "Old",
+                         resptype %in% c("FA","CR")    ~ "New",
+                         .default = NA),
+      # response
+      say_old = case_when(resptype %in% c("Hit","FA")  ~ "Old",
+                          resptype %in% c("CR","Miss") ~ "New",
+                          .default = NA)
+    )
+  
+  if (df_type=="feed") {
+    newdf = newdf %>% 
+      filter(task0!="Strategic") %>% 
+      mutate(
+        # feedback type 
+        is_fpf = case_when(resptype_6 %in% c("Hit","CR") ~ "Correct (real)",
+                           resptype_6 %in% c("FA (real)","Miss (real)") ~ "Incorrect",
+                           resptype_6 %in% c("FA (FPF)","Miss (FPF)") ~ "Correct (FPF)",
+                           .default=NA))
+  }
+  
+  return(newdf)
+}
+```
+
+
+```{r pool function}
+# collapse cell means - use as needed for specified variables 
+collapse_levels = function(df, vars=NULL,type=c("wave","amp"), contrast_var, cell_weight=TRUE) {
+  
+  if (is.null(vars)) {
+    # enter custom list as needed (e.g. if collapsing across cond)
+    vars = c("sub","cue_flip","cue","task0","task","cond","taskcond","time_ms",
+             "df_type","erp_win","erp_chans")
+    if (type=="amp") {
+      vars = vars[vars!="time_ms"]
+    }
+  }
+  
+  # LONG format of contrast levels
+  newdf = df %>% group_by(across(all_of(c(vars,contrast_var)))) %>% 
+    summarise(mean_amp_unwt = mean(mean_amp, na.rm=TRUE),
+              mean_amp_wt   = weighted.mean(mean_amp, cell_ntrials),
+              cell_ntrials = sum(cell_ntrials),
+              .groups="drop")  
+  # sparse cells will be removed in `prep_diff_wave/amp`
+  
+  if (isFALSE(cell_weight)) {
+    # requires a `mean_amp` column for next step
+    # unweighted = averaging over subcells
+    newdf$mean_amp = newdf$mean_amp_unwt
+  } else if (isTRUE(cell_weight)) {
+    # weighted by subcell ntrials
+    newdf$mean_amp = newdf$mean_amp_wt
+  } else (stop("Enter TRUE/FALSE for `cell_weight`"))
+  
+  return(newdf)   # should be sub x taskcond x `contrast_var` x `time_ms`
+  # [!!!] MAY NEED ADDITIONAL FILTERING, e.g. if incorrect-correct contrast limited to non-FPF trials
+  # this then goes into `prep_diff_wave/amp` 
+  
+}
+
+```
+
+
+
+```{r recode & pool across all base df}
+erpwave_df_list <- erpamp_df_list <- NULL
+
+for (i in 1:length(all_amps_list)) {
+  erpwave_df_list[[i]] = recode_levels(all_amps_list[[i]])
+  names(erpwave_df_list)[i] = names(all_amps_list)[i]
+}
+
+for (i in 1:length(mean_amps_list)) {
+  erpamp_df_list[[i]] = recode_levels(mean_amps_list[[i]])
+  names(erpamp_df_list)[i] = names(mean_amps_list)[i]
+}
+
+```
+
+
+```{r get resptype cell N for each epoch type}
+
+get_cell_n = function(df, vars) {
+  cell_n = df %>% group_by(across(all_of(vars))) %>% 
+    filter(cell_ntrials >= min_n) %>% 
+    summarise(ntrials_mean = mean(cell_ntrials), 
+              ntrials_sd   = sd(cell_ntrials),
+              ntrials_min  = min(cell_ntrials), 
+              ntrials_max  = max(cell_ntrials),
+              nsub_valid   = sum(cell_ntrials >= min_n), 
+              .groups = "drop")
+  return(cell_n)
+}
+
+get_cell_n(erpamp_df_list$FN400, vars = c("task","cond", "resptype")) 
+get_cell_n(erpamp_df_list$ERN,   vars = c("task","cond", "resptype")) 
+get_cell_n(erpamp_df_list$FRN,   vars = c("task","cond", "resptype_6"))  # no strategic
+```
+
+
+
+# define contrasts
+```{r contrast info}
+# informational only, contrast does not pull from this list due to repeated rows
+contrast_info = tribble(
+  # contrast levels should be listed in the 
+  ~row, ~erp_name, ~df_type, ~roi,                ~erp_win,    ~contrast_var,  ~contrast_levels,
+  
+  # stim 
+  1,    "FN400",   "stim",   c("Fz","FCz","Cz"),  c(300,500),  "resptype",     c("Hit","CR"),
+  2,    "FN400",   "stim",   c("Fz","FCz","Cz"),  c(300,500),  "is_old",       c("Old","New"),
+  3,    "LPC",     "stim",   c("P3","P4"),        c(600,800),  "resptype",     c("Hit","CR"),
+  
+  # resp 
+  4,    "ERN",     "resp",   c("Cz","FCz"),       c(0,150),    "is_correct",   c("Incorrect","Correct"),
+  5,    "ERN",     "resp",   c("Cz","FCz"),       c(0,150),    "say_old",      c("Old","New"),
+  
+  # feed
+  6,    "FRN",     "feed",   c("Cz","FCz"),       c(250,375),  "is_correct",   c("Incorrect","Correct"),
+  7,    "FRN",     "feed",   c("Cz","FCz"),       c(250,375),  "is_fpf",       c("Correct (FPF)","Correct (real)"),
+  8,    "FRN",     "feed",   c("Cz","FCz"),       c(250,375),  "is_fpf",       c("Correct (FPF)","Incorrect"),
+  9,    "P3",      "feed",   c("Pz","CPz"),       c(400,500),  "is_correct",   c("Incorrect","Correct"),
+  10,   "P3",      "feed",   c("Pz","CPz"),       c(400,500),  "is_fpf",       c("Correct (FPF)","Correct (real)"),
+  11,   "P3",      "feed",   c("Pz","CPz"),       c(400,500),  "is_fpf",       c("Correct (FPF)","Incorrect")
+)
+
+```
+
+
+```{r plot diff function}
+
+# BEFORE PLOTTING, filter out trials where `contrast_levels` values cover more than intended cells
+# e.g. `resptype` probably does not need filtering; `is_correct` needs filtering when limiting to only FPF trials 
+
+plot_custom_diff = function(erpwave_in, erpamp_in, curr_erpname, curr_title, 
+                            contrast_var, contrast_levels, save_fig=F) {
+  
+  curr_win = erp_info$erp_win[erp_info$erp_name==curr_erpname][[1]]  # for full epoch wave window shading only
+  
+  diffwave_df1 = collapse_levels(erpwave_in, contrast_var=contrast_var, type="wave")   # long format of contrast levels
+  diffwave_df2 = prep_erp_diffwave(diffwave_df1,contrast_var=contrast_var,contrast_levels=contrast_levels, avg=TRUE)  # grand average & wide format 
+  print(
+    plot_erp_diffwave(diffwave_df2, erp_win = curr_win, contrast_title = curr_title, save=save_fig)
+  )
+  
+  diffamp_df1 = collapse_levels(erpamp_in, contrast_var=contrast_var, type="amp")
+  diffamp_df2 = prep_erp_diffamp(diffamp_df1, contrast_var=contrast_var,contrast_levels=contrast_levels, avg=TRUE)
+  print(
+    plot_erp_diffamp(diffamp_df2, contrast_title = curr_title, save=save_fig)
+  )
+  
+}
+
+```
+
+
+**SPECIFIC CONTRASTS BELOW**
+```{r effsize function}
+
+# get cohen's d
+get_eff = function(model, model_contrast, type=c("within","between"), method=NULL, by=NULL) {
+  # model object, contrast object, pairs list (optional)
+  # within = within block (e.g. hit-cr within each taskcond; simple effects, interactions, single contrasts)
+  # between = cross block (e.g. compare hit-cr effects across taskcond)
+  sigma = sqrt(sum(as.data.frame(VarCorr(model))$vcov))   # standardizer for d [aka total SD]
+  edf = df.residual(model)
+  
+  type = match.arg(type)
+  if (type == "between") {
+    model_contrast = contrast(model_contrast, by=by, method=method)  # inherit `by`
+  }
+  eff = eff_size(model_contrast, sigma=sigma, edf=edf, method="identity")
+  
+  return(eff)
+}
+
+```
+
+
+```{r descriptives function}
+
+get_des = function(df, vars, save=save_des, folder=NULL) {
+  # df should be model df
+  # produces raw cell M/SD averaged across subjects - will NOT be the same as model emmeans
+  descriptives = df %>% 
+    group_by(across(all_of(vars))) %>% 
+    summarise(mean = mean(mean_amp, na.rm=TRUE), 
+              sd   = sd(mean_amp, na.rm=TRUE), 
+              nsub = n(), 
+              .groups = "drop") 
+  
+  if (isTRUE(save)) {
+    if (is.null(folder)) {
+      folder = "/Users/lunarneko/Desktop/11_erp_stats/"
+    }
+    # e.g. des_stim_FzFCzCz_300_500_task_cond_resptype.csv
+    filename = paste0(folder, "des_", unique(df$df_type), "_",
+                      str_remove_all(unique(df$erp_chans), " "), "_",
+                      str_replace_all(unique(df$erp_win), " ", "_"), "_",
+                      paste(vars, collapse="_"), ".csv")
+    
+    write.csv(descriptives, filename, row.names=FALSE)
+  }
+  
+  return(descriptives)
+}
+
+```
+
+
+```{r custom contrasts}
+# group differences on ~taskcond*cue grid [same as `cue_list` in behavioral `get_sdt.Rmd`]
+# taskcond varies fastest: 5 true then 5 rev cells
+cue_list = list("strategic con-lib true-rev" = c(0,0,0,1,-1,  0,0,0,-1,1),
+                "con strategic true-rev"     = c(0,0,0,1,0,   0,0,0,-1,0),
+                "lib strategic true-rev"     = c(0,0,0,0,1,   0,0,0,0,-1),
+                # base/FPF for reference only / consistency check
+                "FPF con-lib true-rev"       = c(0,1,-1,0,0,  0,-1,1,0,0),
+                "baseline true-rev"          = c(1,0,0,0,0,  -1,0,0,0,0))
+```
+
+
+
+# FEED 
+
+## real correct vs real incorrect, without FPF
+- erp: FRN, P3
+- subset: FPF & baseline task, minus FPF trials
+- collapse: correct/incorrect 
+- diffwave: incorrect-correct x task 
+
+```{r FRN, is_correct}
+# FRN
+erpwave_in = erpwave_df_list$FRN %>% filter(task=="Baseline" | (task=="FPF" & trial_is_fpf==0))
+erpamp_in  = erpamp_df_list$FRN  %>% filter(task=="Baseline" | (task=="FPF" & trial_is_fpf==0))
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "FRN", 
+                 curr_title = glue::glue("\"Incorrect\"{minus}\"Correct\" feedback, excluding FPF trials"), 
+                 contrast_var = "is_correct", contrast_levels = c("Incorrect","Correct"), save_fig=save_fig)
+```
+
+
+```{r P3, is_correct}
+# P3
+erpwave_in = erpwave_df_list$P3 %>% filter(task=="Baseline" | (task=="FPF" & trial_is_fpf==0))
+erpamp_in  = erpamp_df_list$P3  %>% filter(task=="Baseline" | (task=="FPF" & trial_is_fpf==0))
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "P3", 
+                 curr_title = glue::glue("\"Incorrect\"{minus}\"Correct\" feedback, excluding FPF trials"), 
+                 contrast_var = "is_correct", contrast_levels = c("Incorrect","Correct"), save_fig=save_fig)
+
+```
+
+
+
+## FPF vs real correct, matched by resp old/new
+- erp: FRN, P3 
+- subset: FPF only, lib = FA FPF - hit; con = miss FPF - CR 
+- collapse: is_fpf 
+- diffwave/diffamp: FPF-cprrect 
+- model: amp ~ cond * is_fpf 
+- contrasts: lib FPF-correct; con FPF-correct; interaction [lib diff vs con diff]
+
+```{r FRN, is_fpf}
+# FRN
+erpwave_in = erpwave_df_list$FRN %>% filter(task=="FPF") %>% 
+  filter((cond=="Lib" & resptype_6 %in% c("Hit","FA (FPF)")) |
+           (cond=="Con" & resptype_6 %in% c("CR","Miss (FPF)"))) %>% 
+  mutate(cond = case_when(cond=="Lib" ~ glue("Lib (FA FPF{minus}Hit)"),
+                          cond=="Con" ~ glue("Con (Miss FPF{minus}CR)"),
+                          .default = NA)) 
+
+erpamp_in  = erpamp_df_list$FRN  %>% filter(task=="FPF") %>% 
+  filter((cond=="Lib" & resptype_6 %in% c("Hit","FA (FPF)")) |
+           (cond=="Con" & resptype_6 %in% c("CR","Miss (FPF)"))) %>% 
+  mutate(cond = case_when(cond=="Lib" ~ glue("Lib (FA FPF{minus}Hit)"),
+                          cond=="Con" ~ glue("Con (Miss FPF{minus}CR)"),
+                          .default = NA))
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "FRN", 
+                 curr_title = glue("FPF{minus}Correct\nCondition-congruent responses"), 
+                 contrast_var = "is_fpf", contrast_levels = c("Correct (FPF)","Correct (real)"), save_fig=save_fig)
+
+# ==== model: cond x is_fpf ====================================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="is_fpf", type="amp") %>% 
+  filter(cell_ntrials >= min_n)
+
+# raw descriptives for model data [NOT model emmeans]
+get_des(diffamp_model_df, vars = c("taskcond", "is_fpf"))
+
+model.lm = lmer(mean_amp ~ cond * is_fpf + (1|sub) + (1|sub:cond) + (1|sub:is_fpf), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_fpf | cond, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+
+model.emm; model.pairs 
+get_eff(model = model.lm, model_contrast = model.pairs, type="within")
+
+summary(model.pairs, by=NULL, adjust="holm", infer=c(T,T))
+contrast_out = contrast(emmeans(model.lm, ~ is_fpf * cond, lmer.df = "satterthwaite"), 
+                          adjust="holm", interaction="pairwise", infer=c(T,T)) -> FRN_isfpf_cond   # need this for later
+contrast_out 
+get_eff(model = model.lm, model_contrast = contrast_out, type="within") 
+
+```
+
+
+```{r P3, is_fpf}
+# P3
+erpwave_in = erpwave_df_list$P3 %>% filter(task=="FPF") %>% 
+  filter((cond=="Lib" & resptype_6 %in% c("Hit","FA (FPF)")) |
+           (cond=="Con" & resptype_6 %in% c("CR","Miss (FPF)"))) %>% 
+  mutate(cond = case_when(cond=="Lib" ~ glue("Lib (FA FPF{minus}Hit)"),
+                          cond=="Con" ~ glue("Con (Miss FPF{minus}CR)"),
+                          .default = NA))  
+
+erpamp_in  = erpamp_df_list$P3  %>% filter(task=="FPF") %>% 
+  filter((cond=="Lib" & resptype_6 %in% c("Hit","FA (FPF)")) |
+           (cond=="Con" & resptype_6 %in% c("CR","Miss (FPF)"))) %>% 
+  mutate(cond = case_when(cond=="Lib" ~ glue("Lib (FA FPF{minus}Hit)"),
+                          cond=="Con" ~ glue("Con (Miss FPF{minus}CR)"),
+                          .default = NA))
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "P3", 
+                 curr_title = glue("FPF{minus}Correct\nCondition-congruent responses"), 
+                 contrast_var = "is_fpf", contrast_levels = c("Correct (FPF)","Correct (real)"), save_fig=save_fig)
+
+# ==== model: cond x is_fpf ====================================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="is_fpf", type="amp") %>% 
+  filter(cell_ntrials >= min_n)
+
+get_des(diffamp_model_df, vars = c("taskcond", "is_fpf"))
+
+model.lm = lmer(mean_amp ~ cond * is_fpf + (1|sub) + (1|sub:cond) + (1|sub:is_fpf), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_fpf | cond, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+
+model.emm; model.pairs 
+get_eff(model = model.lm, model_contrast = model.pairs, type="within")
+
+summary(model.pairs, by=NULL, adjust="holm", infer=c(T,T))
+contrast_out = contrast(emmeans(model.lm, ~ is_fpf * cond, lmer.df = "satterthwaite"), 
+                         adjust="holm", infer=c(T,T), interaction="pairwise") -> P3_isfpf_cond   # need this for later
+contrast_out
+get_eff(model = model.lm, model_contrast = contrast_out, type="within") 
+
+```
+
+
+
+## control analysis, baseline only
+- subset: baseline only
+- model: amp ~ resptype [hit-cr; fa-miss]  
+
+```{r FRN, baseline resptype}
+# FRN
+erpamp_in = erpamp_df_list$FRN  %>% filter(task=="Baseline") %>% filter(cell_ntrials >= min_n)
+levels(erpamp_df_list$FRN$resptype)   # in this order: hit,fa,cr,miss
+
+get_des(erpamp_in, vars = c("resptype"))
+
+# ==== model: resptype =========================================================
+model.lm = lmer(mean_amp ~ resptype + (1|sub), data=erpamp_in)
+model.emm   = emmeans(model.lm, ~ resptype, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+model.emm; model.pairs
+
+# ===== contrasts ==============================================================
+new_old_list = c(-0.5, 0.5, 0.5, -0.5)  # 0.5*(fa + cr) - 0.5*(hit + miss) [this is avg over fa - hit + cr - miss]
+resptype_contrast = contrast(model.emm, list(new_old = new_old_list))
+summary(resptype_contrast, by=NULL, adjust="holm", infer=c(TRUE, TRUE))
+get_eff(model.lm, model_contrast=resptype_contrast, type="within")
+
+# ===== compare with `is_fpf` effect ===========================================
+eff1 = summary(FRN_isfpf_cond, infer=c(T,T))    
+eff0 = summary(resptype_contrast, infer=c(T,T))
+
+compare_isfpf_FRN = tibble(erp = "FRN",
+                   eff1_lib_con = -eff1$estimate,   # output was con-lib, needs to flip sign here
+                   eff0_item  = eff0$estimate, 
+                   eff0_lower = eff0$lower.CL, 
+                   eff0_upper = eff0$upper.CL,
+                   corrected  = -eff1$estimate - 2*eff0$estimate,
+                   worst_case = -eff1$estimate - 2*eff0$upper.CL)
+compare_isfpf_FRN
+
+```
+
+
+```{r P3, baseline resptype}
+# P3
+erpamp_in  = erpamp_df_list$P3  %>% filter(task=="Baseline") %>% filter(cell_ntrials >= min_n)
+get_des(erpamp_in, vars = c("resptype"))
+
+# ==== model: resptype =========================================================
+model.lm = lmer(mean_amp ~ resptype + (1|sub), data=erpamp_in)
+model.emm   = emmeans(model.lm, ~ resptype, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+# ===== contrasts ==============================================================
+new_old_list = c(-0.5, 0.5, 0.5, -0.5)  # 0.5*(fa + cr) - 0.5*(hit + miss) [this is avg over fa - hit + cr - miss]
+resptype_contrast = contrast(model.emm, list(new_old = new_old_list))
+summary(resptype_contrast, by=NULL, adjust="holm", infer=c(TRUE, TRUE))
+get_eff(model.lm, model_contrast=resptype_contrast, type="within")
+
+# ===== compare with `is_fpf` effect ===========================================
+eff1 = summary(P3_isfpf_cond, infer=c(T,T))    
+eff0 = summary(resptype_contrast, infer=c(T,T))
+
+compare_isfpf_P3 = tibble(erp = "P3",
+                  eff1_lib_con = -eff1$estimate,   # output was con-lib, needs to flip sign here
+                  eff0_item  = eff0$estimate, 
+                  eff0_lower = eff0$lower.CL, 
+                  eff0_upper = eff0$upper.CL,
+                  corrected  = -eff1$estimate - 2*eff0$estimate,
+                  worst_case = -eff1$estimate - 2*eff0$upper.CL)
+compare_isfpf_P3
+```
+
+
+## manipulation check, FPF critical errors 
+- subset: FPF only, lib = FA FPF - FA real; con = miss FPF - miss real  
+- collapse: is_fpf  
+- model: amp ~ is_fpf, avg across lib/con  
+- diffwave/diffamp: FPF - not, collapsed across lib/con  
+skip for now
+
+
+# STIM 
+
+### old/new memory effect, hit-CR 
+- ERP: FN400, LPC 
+- subset: hit/CR only 
+- model: amp ~ taskcond x resptype[hit/cr] 
+- contrast: ??
+- erpwave/erpamp: full taskcond x resptype 
+- diffwave/diffamp: hit-CR x taskcond 
+
+```{r FN400, hit-cr}
+# FN400
+erpwave_in = erpwave_df_list$FN400 
+erpamp_in  = erpamp_df_list$FN400 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "FN400", 
+                 curr_title = glue("Hit{minus}CR"), 
+                 contrast_var = "resptype", contrast_levels = c("Hit","CR"), save_fig=save_fig)
+
+# ==== model: taskcond x hitcr =================================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="resptype", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  filter(resptype %in% c("Hit","CR"))
+
+get_des(diffamp_model_df, vars = c("task","cond","resptype"))
+
+model.lm = lmer(mean_amp ~ taskcond * resptype * cue + (1|sub) + (1|sub:taskcond) + (1|sub:resptype), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ resptype | taskcond*cue, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+
+model.emm; model.pairs 
+
+# ===== contrasts ============================================================== 
+# [!!!] default order alphabetical: base, FPF con, FPF lib, strategic con, strategic lib 
+# list specific contrasts so family-wise adjustment isn't too strict 
+taskcond_pairs_list = list(
+  fpfcon_fpflib = c( 0, 1,-1, 0, 0), scon_slib   = c( 0, 0, 0, 1,-1),  # lib vs con within each task
+  fpfcon_base   = c(-1, 1, 0, 0, 0), scon_base   = c(-1, 0, 0, 1, 0),  # compare to baseline
+  fpflib_base   = c(-1, 0, 1, 0, 0), slib_base   = c(-1, 0, 0, 0, 1),  
+  fpflib_slib   = c( 0, 0, 1, 0,-1), fpfcon_scon = c( 0, 1, 0,-1, 0)   # FPF vs strategic within lib/con
+)
+
+contrast_hitcr = contrast(model.emm, list(hit_cr = c(1,-1)), adjust="holm")   # hit=1, cr=-1 [make sure factor levels are correct]
+contrast_hitcr
+
+# holm within each cue group
+contrast(contrast_hitcr, by="cue", adjust = "holm", infer=c(T,T), method = taskcond_pairs_list)  # "none" for unadjusted pval
+summary(contrast_hitcr, by="cue", adjust="holm", infer=c(T,T))
+
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="within")
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="between",by="cue", method=taskcond_pairs_list)
+
+# full sample, averaged over cue [show base/FPF rows only]
+contrast_hitcr_pooled = contrast(emmeans(model.lm, ~ resptype | taskcond, lmer.df = "satterthwaite"), list(hit_cr = c(1,-1)))
+summary(contrast_hitcr_pooled[1:3], by=NULL, adjust="holm", infer=c(T,T))   # rows 1-3 = base, FPF con, FPF lib
+contrast(contrast_hitcr_pooled, by=NULL, adjust="holm", infer=c(T,T), method = taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+get_eff(model=model.lm, model_contrast = contrast_hitcr_pooled[1:3], type="within")
+get_eff(model=model.lm, model_contrast = contrast_hitcr_pooled, type="between", method=taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+# true vs reversed cue 
+contrast(contrast_hitcr, by=NULL, adjust="holm", infer=c(T,T), method=cue_list[1:3]) # strategic
+contrast(contrast_hitcr, by=NULL, adjust="none", infer=c(T,T), method=cue_list[4:5]) # consistency check, base/FPF
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="between", method=cue_list)
+
+```
+
+
+```{r LPC, hit-cr}
+# LPC
+erpwave_in = erpwave_df_list$LPC 
+erpamp_in  = erpamp_df_list$LPC 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "LPC", 
+                 curr_title = glue("Hit{minus}CR"), 
+                 contrast_var = "resptype", contrast_levels = c("Hit","CR"), save_fig=save_fig)
+
+# ==== model: taskcond x hitcr =================================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="resptype", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  filter(resptype %in% c("Hit","CR"))
+
+get_des(diffamp_model_df, vars = c("task","cond","resptype"))
+
+model.lm = lmer(mean_amp ~ taskcond * resptype * cue + (1|sub) + (1|sub:taskcond) + (1|sub:resptype), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ resptype | taskcond * cue, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+
+model.emm; model.pairs 
+
+# ===== contrasts ============================================================== 
+# [!!!] default order alphabetical: base, FPF con, FPF lib, strategic con, strategic lib 
+# list specific contrasts so family-wise adjustment isn't too strict 
+taskcond_pairs_list = list(
+  fpfcon_fpflib = c( 0, 1,-1, 0, 0), scon_slib   = c( 0, 0, 0, 1,-1),  # lib vs con within each task
+  fpfcon_base   = c(-1, 1, 0, 0, 0), scon_base   = c(-1, 0, 0, 1, 0),  # compare to baseline
+  fpflib_base   = c(-1, 0, 1, 0, 0), slib_base   = c(-1, 0, 0, 0, 1),  
+  fpflib_slib   = c( 0, 0, 1, 0,-1), fpfcon_scon = c( 0, 1, 0,-1, 0)   # FPF vs strategic within lib/con
+)
+
+contrast_hitcr = contrast(model.emm, list(hit_cr = c(1,-1)), adjust="holm")   # hit=1, cr=-1 [make sure factor levels are correct]
+contrast_hitcr
+
+# holm within each cue group
+contrast(contrast_hitcr, by="cue", adjust = "holm", infer=c(T,T), method = taskcond_pairs_list)  # "none" for unadjusted pval
+summary(contrast_hitcr, by="cue", adjust="holm", infer=c(T,T))
+
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="within")
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="between",by="cue", method=taskcond_pairs_list)
+
+# full sample, averaged over cue [report base/FPF rows only]
+contrast_hitcr_pooled = contrast(emmeans(model.lm, ~ resptype | taskcond, lmer.df = "satterthwaite"), list(hit_cr = c(1,-1)))
+summary(contrast_hitcr_pooled[1:3], by=NULL, adjust="holm", infer=c(T,T))   # rows 1-3 = base, FPF con, FPF lib
+contrast(contrast_hitcr_pooled, by=NULL, adjust="holm", infer=c(T,T), method = taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+get_eff(model=model.lm, model_contrast = contrast_hitcr_pooled[1:3], type="within")
+get_eff(model=model.lm, model_contrast = contrast_hitcr_pooled, type="between", method=taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+# true vs reversed cue 
+contrast(contrast_hitcr, by=NULL, adjust="holm", infer=c(T,T), method=cue_list[1:3])   # strategic
+contrast(contrast_hitcr, by=NULL, adjust="none", infer=c(T,T), method=cue_list[4:5])   # consistency check, base/FPF
+get_eff(model=model.lm, model_contrast = contrast_hitcr, type="between", method=cue_list)
+
+```
+
+
+### FPF old/new item effect 
+- erp: FN400, maybe LPC
+- collapse: is_old 
+- model: amp ~ cond x is_old 
+- contrasts: new items lib-con; old items lib-con; interaction 
+- [NEW] erpwave: is_old x libcon   *?????????????*
+- diffwave/diffamp: lib-con, old and new items on separate panels [?????] 
+
+```{r FN400, is_old}
+# FN400
+erpwave_in = erpwave_df_list$FN400 
+erpamp_in  = erpamp_df_list$FN400 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "FN400", 
+                 curr_title = glue("Old{minus}New"), 
+                 contrast_var = "is_old", contrast_levels = c("Old","New"), save_fig=save_fig)
+
+# ==== model: all taskcond x is_old ============================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="is_old", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(is_old = factor(is_old, levels=c("Old","New")))  # specify levels for contrast order in model
+
+get_des(diffamp_model_df, vars = c("task","cond","is_old"))
+
+model.lm = lmer(mean_amp ~ taskcond * is_old * cue + (1|sub) + (1|sub:taskcond) + (1|sub:is_old), data=diffamp_model_df)
+# replace `taskcond` with `task*cond` but need to get around empty cell issue from baseline
+model.emm = emmeans(model.lm, ~ is_old | taskcond * cue, lmer.df = "satterthwaite")   # is there an old/new effect in each taskcond
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+# ===== contrasts ============================================================== 
+# [!!!] default order alphabetical: base, FPF con, FPF lib, strategic con, strategic lib 
+# list specific contrasts so family-wise adjustment isn't too strict 
+taskcond_pairs_list = list(
+  fpfcon_fpflib = c( 0, 1,-1, 0, 0), scon_slib   = c( 0, 0, 0, 1,-1),  # lib vs con within each task
+  fpfcon_base   = c(-1, 1, 0, 0, 0), scon_base   = c(-1, 0, 0, 1, 0),  # compare to baseline
+  fpflib_base   = c(-1, 0, 1, 0, 0), slib_base   = c(-1, 0, 0, 0, 1),  
+  fpflib_slib   = c( 0, 0, 1, 0,-1), fpfcon_scon = c( 0, 1, 0,-1, 0)   # FPF vs strategic within lib/con
+)
+
+contrast_isold = contrast(model.emm, list(old_new = c(1,-1)), adjust="holm")   # old=1,new=-1 [make sure factor levels are correct]
+contrast_isold
+
+# within each cue group 
+contrast(contrast_isold, by="cue", adjust = "holm", infer=c(T,T), method = taskcond_pairs_list)  # "none" for unadjusted pval
+summary(contrast_isold, by="cue", adjust="holm", infer=c(T,T))
+
+get_eff(model=model.lm, model_contrast = contrast_isold, type="within")
+get_eff(model=model.lm, model_contrast = contrast_isold, type="between",by="cue", method=taskcond_pairs_list)
+
+
+# full sample, averaged over cue [report base/FPF rows only]
+contrast_isold_pooled = contrast(emmeans(model.lm, ~ is_old | taskcond, lmer.df = "satterthwaite"), list(old_new = c(1,-1)))
+summary(contrast_isold_pooled[1:3], by=NULL, adjust="holm", infer=c(T,T))   # rows 1-3 = base, FPF con, FPF lib
+contrast(contrast_isold_pooled, by=NULL, adjust="holm", infer=c(T,T), method = taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+get_eff(model=model.lm, model_contrast = contrast_isold_pooled[1:3], type="within")
+get_eff(model=model.lm, model_contrast = contrast_isold_pooled, type="between", method=taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+# true vs reversed cue 
+contrast(contrast_isold, by=NULL, adjust="holm", infer=c(T,T), method=cue_list[1:3])   # strategic
+contrast(contrast_isold, by=NULL, adjust="none", infer=c(T,T), method=cue_list[4:5])   # consistency check, base/FPF
+get_eff(model=model.lm, model_contrast = contrast_isold, type="between", method=cue_list)
+
+# ==== model: cond x is_old, FPF only ==========================================
+diffamp_model_df = collapse_levels(erpamp_in %>% filter(task=="FPF"), 
+                                   contrast_var="is_old", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(is_old = factor(is_old, levels=c("Old","New")),
+         cond   = factor(cond,   levels=c("Lib","Con")))   
+
+get_des(diffamp_model_df, vars = c("taskcond","is_old"))
+
+model.lm = lmer(mean_amp ~ cond * is_old + (1|sub) + (1|sub:cond) + (1|sub:is_old), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_old | cond, lmer.df = "satterthwaite")  # old-new within each cond
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+model.emm2   = emmeans(model.lm, ~ cond | is_old, lmer.df = "satterthwaite")  # lib-con within each status
+model.pairs2 = pairs(model.emm2)
+model.emm2; model.pairs2 
+
+summary(model.pairs2, by=NULL, adjust="holm", infer=c(T,T))
+contrast_out = contrast(emmeans(model.lm, ~ is_old * cond, lmer.df = "satterthwaite"), 
+         adjust="holm", interaction="pairwise", infer=c(T,T)) 
+contrast_out
+
+get_eff(model = model.lm, model_contrast = contrast_out, type="within")
+
+```
+
+
+```{r LPC, is_old}
+# LPC
+erpwave_in = erpwave_df_list$LPC 
+erpamp_in  = erpamp_df_list$LPC 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "LPC", 
+                 curr_title = glue("Old{minus}New"), 
+                 contrast_var = "is_old", contrast_levels = c("Old","New"), save_fig=save_fig)
+
+# ==== model: all taskcond x is_old ============================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="is_old", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(is_old = factor(is_old, levels=c("Old","New")))  # specify levels for contrast order in model
+
+get_des(diffamp_model_df, vars = c("task","cond","is_old"))
+
+model.lm = lmer(mean_amp ~ taskcond * is_old * cue + (1|sub) + (1|sub:taskcond) + (1|sub:is_old), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_old | taskcond * cue, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+# ==== model: cond x is_old, FPF only ==========================================
+diffamp_model_df = collapse_levels(erpamp_in %>% filter(task=="FPF"), 
+                                   contrast_var="is_old", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(is_old = factor(is_old, levels=c("Old","New")),
+         cond   = factor(cond,   levels=c("Lib","Con")))  
+
+get_des(diffamp_model_df, vars = c("taskcond","is_old"))
+
+model.lm = lmer(mean_amp ~ cond * is_old + (1|sub) + (1|sub:cond) + (1|sub:is_old), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_old | cond, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+model.emm2   = emmeans(model.lm, ~ cond | is_old, lmer.df = "satterthwaite")  # lib-con within each status
+model.pairs2 = pairs(model.emm2)
+model.emm2; model.pairs2 
+
+summary(model.pairs2, by=NULL, adjust="holm", infer=c(T,T))
+contrast_out = contrast(emmeans(model.lm, ~ is_old * cond, lmer.df = "satterthwaite"), 
+         adjust="holm", interaction="pairwise", infer=c(T,T))  
+contrast_out
+
+get_eff(model = model.lm, model_contrast = contrast_out, type="within")
+
+```
+
+
+
+
+# RESP  
+
+### overall error effect
+- erp: ERN 
+- collapse: incorrect vs correct
+- diff: incorrect-correct 
+- model: amp ~ is_correct x taskcond 
+- erpwave/erpamp: full taskcond x resptype 
+- diffwave/diffamp: diff x taskcond 
+
+
+```{r ERN, is_correct}
+# ERN
+erpwave_in = erpwave_df_list$ERN 
+erpamp_in  = erpamp_df_list$ERN 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "ERN", 
+                 curr_title = glue("Incorrect{minus}Correct"), 
+                 contrast_var = "is_correct", contrast_levels = c("Incorrect","Correct"), save_fig=save_fig)
+
+# ==== model: taskcond x is_correct ============================================
+diffamp_model_df = collapse_levels(erpamp_in, contrast_var="is_correct", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(is_correct = factor(is_correct, levels=c("Incorrect","Correct")))
+
+get_des(diffamp_model_df, vars = c("task","cond","is_correct"))
+
+model.lm = lmer(mean_amp ~ taskcond * is_correct * cue + (1|sub) + (1|sub:taskcond) + (1|sub:is_correct), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ is_correct | taskcond * cue, lmer.df = "satterthwaite")
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+# ===== contrasts ============================================================== 
+# [!!!] default order alphabetical: base, FPF con, FPF lib, strategic con, strategic lib 
+# list specific contrasts so family-wise adjustment isn't too strict 
+taskcond_pairs_list = list(
+  fpfcon_fpflib = c( 0, 1,-1, 0, 0), scon_slib   = c( 0, 0, 0, 1,-1),  # lib vs con within each task
+  fpfcon_base   = c(-1, 1, 0, 0, 0), scon_base   = c(-1, 0, 0, 1, 0),  # compare to baseline
+  fpflib_base   = c(-1, 0, 1, 0, 0), slib_base   = c(-1, 0, 0, 0, 1),  
+  fpflib_slib   = c( 0, 0, 1, 0,-1), fpfcon_scon = c( 0, 1, 0,-1, 0)   # FPF vs strategic within lib/con
+)
+
+contrast_iscorrect = contrast(model.emm, list(incorrect_correct = c(1,-1)), adjust="holm")   # incorrect=1, correct=-1 [make sure factor levels are correct]
+contrast_iscorrect
+
+# within each cue group
+contrast(contrast_iscorrect, by="cue", adjust="holm", infer=c(T,T), method = taskcond_pairs_list)  # "none" for unadjusted pval
+summary(contrast_iscorrect, by="cue", adjust="holm", infer=c(T,T))
+
+get_eff(model=model.lm, model_contrast = contrast_iscorrect, type="within")
+get_eff(model=model.lm, model_contrast = contrast_iscorrect, type="between",by="cue", method=taskcond_pairs_list)
+
+
+# full sample, averaged over cue [report base/FPF rows only]
+contrast_iscorrect_pooled = contrast(emmeans(model.lm, ~ is_correct | taskcond, lmer.df = "satterthwaite"), list(incorrect_correct = c(1,-1)))
+summary(contrast_iscorrect_pooled[1:3], by=NULL, adjust="holm", infer=c(T,T))   # rows 1-3 = base, FPF con, FPF lib
+contrast(contrast_iscorrect_pooled, by=NULL, adjust="holm", infer=c(T,T), method = taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+get_eff(model=model.lm, model_contrast = contrast_iscorrect_pooled[1:3], type="within")
+get_eff(model=model.lm, model_contrast = contrast_iscorrect_pooled, type="between", method=taskcond_pairs_list[c("fpfcon_fpflib","fpfcon_base","fpflib_base")])
+
+# true vs reversed cue 
+contrast(contrast_iscorrect, by=NULL, adjust="holm", infer=c(T,T), method=cue_list[1:3])   # strategic
+contrast(contrast_iscorrect, by=NULL, adjust="none", infer=c(T,T), method=cue_list[4:5])   # consistency check, base/FPF
+get_eff(model=model.lm, model_contrast = contrast_iscorrect, type="between", method=cue_list)
+
+```
+
+
+
+### overall bias effect / criterion condition effect 
+- erp: ERN 
+- collapse: sayold/saynew
+- subset: strategic/FPF only 
+- diffwave/diffamp: sayold-saynew x task, lib/con overlaid within task 
+
+```{r ERN, say_old}
+# ERN
+erpwave_in = erpwave_df_list$ERN 
+erpamp_in  = erpamp_df_list$ERN 
+
+# ==== plot diff ===============================================================
+plot_custom_diff(erpwave_in, erpamp_in, 
+                 curr_erpname = "ERN", 
+                 curr_title = glue("\"Old\"{minus}\"New\" responses"), 
+                 contrast_var = "say_old", contrast_levels = c("Old","New"), save_fig=save_fig)
+
+# ==== model: task x cond x say_old, strategic/FPF only ========================
+diffamp_model_df = collapse_levels(erpamp_in %>% filter(task!="Baseline"), 
+                                   contrast_var="say_old", type="amp") %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(say_old = factor(say_old, levels=c("Old","New")),
+         cond    = factor(cond, levels=c("Lib","Con")))
+
+get_des(diffamp_model_df, vars = c("task","cond","say_old"))
+
+model.lm = lmer(mean_amp ~ task0 * cond * say_old * cue + (1|sub) + (1|sub:taskcond) + (1|sub:say_old), data=diffamp_model_df)
+model.emm   = emmeans(model.lm, ~ say_old * cond | task0 * cue, lmer.df = "satterthwaite") 
+model.pairs = pairs(model.emm)
+model.emm; model.pairs 
+
+# cond x response within each task, by cue group
+eff_within   = contrast(emmeans(model.lm, ~ say_old * cond | task0 * cue, 
+                                lmer.df = "satterthwaite"), interaction = "pairwise")
+# FPF vs strategic, by cue group
+eff_taskcond = contrast(emmeans(model.lm, ~ say_old * cond * task0 | cue, 
+                                lmer.df = "satterthwaite"), interaction = "pairwise")
+# true vs reversed, by task [FPF = consistency check]
+eff_cue      = contrast(emmeans(model.lm, ~ say_old * cond * cue | task0,   
+                                lmer.df = "satterthwaite"), interaction = "pairwise")
+# full sample, averaged over cue [report FPF row only]
+eff_pooled   = contrast(emmeans(model.lm, ~ say_old * cond | task0,         
+                                lmer.df = "satterthwaite"), interaction = "pairwise")
+
+summary(eff_within, by="cue", infer=c(T,T), adjust="holm")
+summary(eff_taskcond,         infer=c(T,T))
+summary(eff_cue,              infer=c(T,T))
+summary(eff_pooled,           infer=c(T,T))
+
+get_eff(model=model.lm, model_contrast = eff_within,   type="within")
+get_eff(model=model.lm, model_contrast = eff_taskcond, type="within")
+get_eff(model=model.lm, model_contrast = eff_cue,      type="within")
+get_eff(model=model.lm, model_contrast = eff_pooled,   type="within")
+
+```
+
+# ERP-behavior correlations 
+- diffamp for F2, S2
+
+- FRN, FPF lib only, [FA FPF - hit] ~ [FPF lib c - baseline c???]
+- FRN diff (same as ^) ~ [strategic cshift] (distinct mechanisms predicts no relationship)
+- FN400, FPF only, [old-new effect lib-con diff] ~ [FPF cshift]
+
+```{r ERP-behavior}
+
+cshift = read.csv("../../data_code_beh/subj_summary/cshift.csv") %>% rename(sub=subID)  
+sdt_base = read.csv("../../data_code_beh/subj_summary/sdt_baseline.csv") %>% rename(sub=subID)  
+
+c_fpf_base = cshift %>% filter(task=="FPF") %>% 
+  select(sub,task,cshift,Lib) %>% rename(c2 = Lib) %>% 
+  bind_rows(sdt_base %>% select(sub,task,c2)) %>% 
+  pivot_wider(names_from=task,values_from=c(c2,cshift)) %>% select(-cshift_Baseline) %>% 
+  rename(c2_FPF_lib = c2_FPF) %>% 
+  mutate(fpf_base_cdiff = c2_FPF_lib - c2_Baseline)  # difference in c during FPF lib compared to baseline
+
+# FRN effects 
+fpf_lib_hitfa_FRN = erpamp_df_list$FRN  %>% filter(task=="FPF" & cond=="Lib") %>% 
+  filter((cond=="Lib" & resptype_6 %in% c("Hit","FA (FPF)"))) %>% 
+  filter(cell_ntrials >= min_n) %>% 
+  mutate(cond = case_when(cond=="Lib" ~ glue("Lib (FA FPF{minus}Hit)"),
+                          .default = NA)) %>% 
+  prep_erp_diffamp(contrast_var = "resptype_6", contrast_levels=c("FA (FPF)","Hit"), avg=FALSE) %>% 
+  merge(c_fpf_base, by="sub") 
+
+cor.test(fpf_lib_hitfa_FRN$diff, fpf_lib_hitfa_FRN$fpf_base_cdiff)  # FRN effect ~ lib FPF cshift relative to baseline
+cor.test(fpf_lib_hitfa_FRN$diff, fpf_lib_hitfa_FRN$c2_FPF_lib)      # FRN effect ~ lib FPF c
+
+cshift_strategic_FRN = cshift %>% filter(task0=="Strategic") %>% 
+  rename(strategic_con = Con, 
+         strategic_lib = Lib,
+         strategic_cshift = cshift) %>% 
+  select(sub, strategic_con, strategic_lib, strategic_cshift) %>% 
+  merge(fpf_lib_hitfa_FRN, by="sub")
+
+# FRN effect ~ strategic cshift, by cue group [sanity check, should have NO relationship]
+cor.test(~ diff+strategic_cshift, data = cshift_strategic_FRN %>% filter(cue=="True"))
+cor.test(~ diff+strategic_cshift, data = cshift_strategic_FRN %>% filter(cue=="Reversed"))
+
+# FN400 old-new effects
+fpf_oldnew_FN400 = collapse_levels(erpamp_df_list$FN400 %>% filter(task == "FPF"),
+                                   contrast_var="is_old", type="amp") %>%   
+  filter(cell_ntrials >= min_n) %>%
+  select(sub, cond, is_old, mean_amp) %>%
+  pivot_wider(names_from = c(cond, is_old), values_from = mean_amp) %>%   
+  mutate(lib_oldnew = Lib_Old - Lib_New,
+         con_oldnew = Con_Old - Con_New,
+         oldnew_libcon = lib_oldnew - con_oldnew) %>%   # FN400 diff in diff: is old/new effect larger in lib or con
+  filter(!is.na(oldnew_libcon)) %>% 
+  merge(cshift %>% filter(task=="FPF"), by="sub") %>% 
+  rename(FPF_con = Con,
+         FPF_lib = Lib,
+         FPF_cshift = cshift)
+
+cor.test(fpf_oldnew_FN400$oldnew_libcon, fpf_oldnew_FN400$FPF_cshift)  # lib-con diff in old-new diff ~ FPF cshift
+
+```
+
+
+```{r plot corr}
+library(ggpmisc)
+
+#fpf_oldnew_FN400
+#cshift_strategic_FRN
+
+p1 = ggplot(fpf_oldnew_FN400, aes(x=oldnew_libcon,y=FPF_cshift)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(alpha = 0.7,shape=16, size=1) +
+  ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE, size=3) +
+  labs(x = glue("FN400 old/new item effect\nFPF Liberal{minus}Conservative (µV)"), y=glue("FPF {Delta}c")) +
+  theme_bw(base_size=10)
+
+p2 = ggplot(cshift_strategic_FRN, aes(x=diff,y=fpf_base_cdiff)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(alpha = 0.7,shape=16, size=1) +
+  ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE, size=3) +
+  labs(x = glue("Liberal FPF effect at FRN\nFA (FPF){minus}Hit (µV)"), y=expression(Delta*italic(c)[baseline])) +
+  theme_bw(base_size=10)
+
+p3 = ggplot(cshift_strategic_FRN, aes(x=diff,y=strategic_cshift)) +
+  facet_grid(cols=vars(cue), labeller=as_labeller(c(True="True cue", Reversed="Reversed cue"))) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(alpha = 0.7,shape=16, size=1) +
+  ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE, size=3) +
+  labs(x = glue("Liberal FPF effect at FRN\nFA (FPF){minus}Hit (µV)"), y=glue("Strategic {Delta}c")) +
+  theme_bw(base_size=10)
+
+#(p1|p2|p3) + plot_layout(widths=c(1,1,2)) + plot_annotation(tag_levels = "a")  # patchwork
+((p1 | p2) / p3) + plot_annotation(tag_levels = "a")  # 2x2, p3 facets on bottom row
+if (isTRUE(save_fig)) {
+  ggsave(".././ggsave/behavior_erp_corr.pdf", width=6.5, height=6, device=cairo_pdf)
+}
+
+```
+

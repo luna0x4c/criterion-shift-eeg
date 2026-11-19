@@ -1,0 +1,128 @@
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: conf ~ i_trial0 * taskcond2 * cue + (1 | subID)
+data:    alltrials_conf
+
+ link  threshold nobs  logLik    AIC      niter       max.grad cond.H 
+ logit flexible  44166 -39254.07 78552.14 5939(46763) 3.75e-02 4.1e+03
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ subID  (Intercept) 2.413    1.553   
+Number of groups:  subID 74 
+
+Coefficients:
+                                            Estimate Std. Error z value
+i_trial0                                   -0.209276   0.025065  -8.349
+taskcond2FPFCon                             0.286507   0.043363   6.607
+taskcond2FPFLib                             0.153015   0.042905   3.566
+taskcond2StrategicCon                      -0.015869   0.042607  -0.372
+taskcond2StrategicLib                       0.266787   0.043656   6.111
+cueReversed                                 0.696567   0.364546   1.911
+i_trial0:taskcond2FPFCon                    0.175296   0.043241   4.054
+i_trial0:taskcond2FPFLib                    0.206460   0.042877   4.815
+i_trial0:taskcond2StrategicCon              0.150082   0.042642   3.520
+i_trial0:taskcond2StrategicLib              0.150281   0.043533   3.452
+i_trial0:cueReversed                        0.132574   0.033835   3.918
+taskcond2FPFCon:cueReversed                -0.065596   0.058601  -1.119
+taskcond2FPFLib:cueReversed                -0.002320   0.058281  -0.040
+taskcond2StrategicCon:cueReversed          -0.008567   0.058049  -0.148
+taskcond2StrategicLib:cueReversed          -0.536340   0.058559  -9.159
+i_trial0:taskcond2FPFCon:cueReversed       -0.112229   0.058446  -1.920
+i_trial0:taskcond2FPFLib:cueReversed       -0.185264   0.058210  -3.183
+i_trial0:taskcond2StrategicCon:cueReversed -0.190395   0.057945  -3.286
+i_trial0:taskcond2StrategicLib:cueReversed -0.195524   0.058328  -3.352
+                                           Pr(>|z|)    
+i_trial0                                    < 2e-16 ***
+taskcond2FPFCon                            3.92e-11 ***
+taskcond2FPFLib                            0.000362 ***
+taskcond2StrategicCon                      0.709561    
+taskcond2StrategicLib                      9.89e-10 ***
+cueReversed                                0.056033 .  
+i_trial0:taskcond2FPFCon                   5.04e-05 ***
+i_trial0:taskcond2FPFLib                   1.47e-06 ***
+i_trial0:taskcond2StrategicCon             0.000432 ***
+i_trial0:taskcond2StrategicLib             0.000556 ***
+i_trial0:cueReversed                       8.92e-05 ***
+taskcond2FPFCon:cueReversed                0.262988    
+taskcond2FPFLib:cueReversed                0.968242    
+taskcond2StrategicCon:cueReversed          0.882678    
+taskcond2StrategicLib:cueReversed           < 2e-16 ***
+i_trial0:taskcond2FPFCon:cueReversed       0.054830 .  
+i_trial0:taskcond2FPFLib:cueReversed       0.001459 ** 
+i_trial0:taskcond2StrategicCon:cueReversed 0.001017 ** 
+i_trial0:taskcond2StrategicLib:cueReversed 0.000802 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Threshold coefficients:
+         Estimate Std. Error z value
+low|med   -1.5261     0.2738  -5.574
+med|high   0.2467     0.2737   0.901
+
+
+====================
+Cumulative Link Mixed Model fitted with the Laplace approximation
+
+formula: conf ~ i_trial0 * taskcond2 * cue + (1 | subID)
+data:    alltrials_conf_reinforced
+
+ link  threshold nobs  logLik    AIC      niter       max.grad cond.H 
+ logit flexible  25010 -21787.47 43618.94 4824(33727) 9.87e-03 2.3e+03
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ subID  (Intercept) 2.458    1.568   
+Number of groups:  subID 74 
+
+Coefficients:
+                                           Estimate Std. Error z value Pr(>|z|)
+i_trial0                                   -0.23977    0.03072  -7.805 5.96e-15
+taskcond2FPFCon                            -0.21924    0.05673  -3.864 0.000111
+taskcond2FPFLib                             0.21223    0.05978   3.550 0.000385
+taskcond2StrategicCon                      -0.40677    0.05412  -7.517 5.62e-14
+taskcond2StrategicLib                       0.48265    0.05810   8.306  < 2e-16
+cueReversed                                 0.70143    0.37323   1.879 0.060197
+i_trial0:taskcond2FPFCon                    0.24440    0.05619   4.350 1.36e-05
+i_trial0:taskcond2FPFLib                    0.23438    0.06026   3.890 0.000100
+i_trial0:taskcond2StrategicCon              0.22362    0.05370   4.164 3.13e-05
+i_trial0:taskcond2StrategicLib              0.22307    0.05835   3.823 0.000132
+i_trial0:cueReversed                        0.14798    0.04152   3.564 0.000366
+taskcond2FPFCon:cueReversed                -0.11665    0.07648  -1.525 0.127210
+taskcond2FPFLib:cueReversed                 0.15868    0.08265   1.920 0.054877
+taskcond2StrategicCon:cueReversed          -0.52929    0.07656  -6.913 4.74e-12
+taskcond2StrategicLib:cueReversed          -0.60567    0.08192  -7.393 1.43e-13
+i_trial0:taskcond2FPFCon:cueReversed       -0.11441    0.07592  -1.507 0.131823
+i_trial0:taskcond2FPFLib:cueReversed       -0.24597    0.08282  -2.970 0.002979
+i_trial0:taskcond2StrategicCon:cueReversed -0.25139    0.07555  -3.328 0.000876
+i_trial0:taskcond2StrategicLib:cueReversed -0.29590    0.08251  -3.586 0.000336
+                                              
+i_trial0                                   ***
+taskcond2FPFCon                            ***
+taskcond2FPFLib                            ***
+taskcond2StrategicCon                      ***
+taskcond2StrategicLib                      ***
+cueReversed                                .  
+i_trial0:taskcond2FPFCon                   ***
+i_trial0:taskcond2FPFLib                   ***
+i_trial0:taskcond2StrategicCon             ***
+i_trial0:taskcond2StrategicLib             ***
+i_trial0:cueReversed                       ***
+taskcond2FPFCon:cueReversed                   
+taskcond2FPFLib:cueReversed                .  
+taskcond2StrategicCon:cueReversed          ***
+taskcond2StrategicLib:cueReversed          ***
+i_trial0:taskcond2FPFCon:cueReversed          
+i_trial0:taskcond2FPFLib:cueReversed       ** 
+i_trial0:taskcond2StrategicCon:cueReversed ***
+i_trial0:taskcond2StrategicLib:cueReversed ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Threshold coefficients:
+         Estimate Std. Error z value
+low|med  -1.77290    0.28001  -6.331
+med|high  0.02829    0.27976   0.101
+
+
+====================

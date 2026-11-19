@@ -1,0 +1,601 @@
+"subID","curr_cond","curr_new_keys","curr_old_keys","curr_task","feed_text","is_correct","is_correct_text","participant","phase","resp_real.key","resp_real.rt","stim_img","studied","i_trial","conf","resp_old","resp_type","critical_err","trial_is_fpf","test_block","cue_flip"
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",2.061069727,"stim_960/crop_250x250_sun_blsbpqjmkatjrdcb.jpg",0,1,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","s",2.429434061,"stim_960/crop_250x250_sun_amadggdncbwcjlim.jpg",1,2,"high","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",2.179977179,"stim_960/crop_250x250_sun_asdzqqddxsudbfbx.jpg",1,3,"med","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",2.178322315,"stim_960/crop_250x250_sun_diunpouhrgtbtfqw.jpg",0,4,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",2.06233573,"stim_960/crop_250x250_sun_aecyatmxxhmiaaww.jpg",0,5,"med","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",2.931108952,"stim_960/crop_250x250_sun_afvdjwntcmqlrxcn.jpg",0,6,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","f",1.762869596,"stim_960/crop_250x250_sun_banljcigbjcnrhwf.jpg",1,7,"low","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.846133471,"stim_960/crop_250x250_sun_alqsglfsepwjgbtp.jpg",0,8,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.228609324,"stim_960/crop_250x250_sun_ayhkhcaimdmhjdul.jpg",1,9,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.180753708,"stim_960/crop_250x250_sun_akaswrdvglzftodl.jpg",1,10,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.944211006,"stim_960/crop_250x250_sun_amutttaaecmtofxe.jpg",1,11,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.519870281,"stim_960/crop_250x250_sun_ahdfoswooxyddlhl.jpg",0,12,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.74515295,"stim_960/crop_250x250_sun_arkufwzdtgdzurjr.jpg",0,13,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.760505438,"stim_960/crop_250x250_sun_algbvuekmjkeztnw.jpg",0,14,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","k",1.619618893,"stim_960/crop_250x250_sun_bqrqagavhomylkzp.jpg",0,15,"med","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","j",3.21790576,"stim_960/crop_250x250_sun_atfjmsjrabojoqsv.jpg",0,16,"low","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.996113777,"stim_960/crop_250x250_sun_aphjcbmmczxrrapj.jpg",1,17,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",2.088964224,"stim_960/crop_250x250_sun_avfoopxabniirtia.jpg",1,18,"med","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",2.089311123,"stim_960/crop_250x250_sun_avipnwjpgaybzewi.jpg",0,19,"med","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.071981907,"stim_960/crop_250x250_sun_aczmgnjjiykpqyts.jpg",1,20,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.666165113,"stim_960/crop_250x250_sun_blqenqamxclrhysf.jpg",0,21,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.898815632,"stim_960/crop_250x250_sun_bspqiewxjqvlitdz.jpg",0,22,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",2.185802937,"stim_960/crop_250x250_sun_aspluyoenxcyxqif.jpg",1,23,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","s",1.454226732,"stim_960/crop_250x250_sun_bbhgvxhqcylfjmrk.jpg",1,24,"high","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.98453784,"stim_960/crop_250x250_sun_aswfsqrcskbewqzh.jpg",1,25,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",1.802801132,"stim_960/crop_250x250_sun_bjvhstoqyjatkxof.jpg",1,26,"med","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","k",1.288295984,"stim_960/crop_250x250_sun_bawgvmrubdiirgik.jpg",0,27,"med","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.797980547,"stim_960/crop_250x250_sun_ajlpmrvmwcoljspb.jpg",0,28,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.856471539,"stim_960/crop_250x250_sun_apdoxrsswluydliw.jpg",0,29,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","f",2.267025471,"stim_960/crop_250x250_sun_axtsjkxaatmyczsd.jpg",1,30,"low","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.05010128,"stim_960/crop_250x250_sun_bhyevjifacsvkxie.jpg",0,31,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.868808746,"stim_960/crop_250x250_sun_aqbrnyaskrbtbqnn.jpg",0,32,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",3.034454346,"stim_960/crop_250x250_sun_asswxmehnbxqlkup.jpg",0,33,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",3.833279371,"stim_960/crop_250x250_sun_bjfkrprjbqoippnj.jpg",0,34,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.213978291,"stim_960/crop_250x250_sun_ajgbrtneyyhkyicn.jpg",0,35,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.866354704,"stim_960/crop_250x250_sun_bgdoamisahhkxosv.jpg",0,36,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.869132519,"stim_960/crop_250x250_sun_aybwawtwjngqleal.jpg",0,37,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",2.950405121,"stim_960/crop_250x250_sun_bqnaambkgbrosuwi.jpg",1,38,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",2.266624689,"stim_960/crop_250x250_sun_auklmbcqzaypytnn.jpg",1,39,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","f",2.99968195,"stim_960/crop_250x250_sun_axbgbiaelxyyfwxj.jpg",1,40,"low","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","j",1.551719904,"stim_960/crop_250x250_sun_ablndpwjquegrbqn.jpg",1,41,"low","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.884036779,"stim_960/crop_250x250_sun_bhkfkarzhivoiuku.jpg",1,42,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.798978567,"stim_960/crop_250x250_sun_bipzmmzrqwbmobac.jpg",0,43,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.33567524,"stim_960/crop_250x250_sun_aisourquowrxjcdv.jpg",1,44,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.100473166,"stim_960/crop_250x250_sun_ajiqxmdxuguumbeu.jpg",0,45,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.915572405,"stim_960/crop_250x250_sun_buzjimfintnbaijs.jpg",1,46,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.898150444,"stim_960/crop_250x250_sun_aznvghzmlfulxvro.jpg",1,47,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.331365347,"stim_960/crop_250x250_sun_bccklgldbmbdmmqx.jpg",1,48,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.806018829,"stim_960/crop_250x250_sun_bkvsufxrrcnbbmzr.jpg",1,49,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.785502195,"stim_960/crop_250x250_sun_afnvjzmcqpzrbooh.jpg",0,50,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.000403166,"stim_960/crop_250x250_sun_bxxqkypwexedhjce.jpg",0,51,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",3.300970554,"stim_960/crop_250x250_sun_bamlokpikhxywiym.jpg",0,52,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.035100698,"stim_960/crop_250x250_sun_aikqcbhdkrubwqzq.jpg",0,53,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",3.251467466,"stim_960/crop_250x250_sun_amwafzxoxgrwljbz.jpg",0,54,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.716655016,"stim_960/crop_250x250_sun_bwwjilxyexhbecua.jpg",1,55,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.666211843,"stim_960/crop_250x250_sun_bekpknawufhfoptf.jpg",1,56,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.201352119,"stim_960/crop_250x250_sun_baoueubuomzabsfr.jpg",1,57,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",1.651192904,"stim_960/crop_250x250_sun_adpqauwpukurrfkd.jpg",1,58,"med","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.500699759,"stim_960/crop_250x250_sun_ahglqbfkxbqactrv.jpg",1,59,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.869470835,"stim_960/crop_250x250_sun_abadecjsoottqgbp.jpg",1,60,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",2.800331831,"stim_960/crop_250x250_sun_bbgfhlyazkjumwnd.jpg",0,61,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.333758354,"stim_960/crop_250x250_sun_akufwyyoybfmcifg.jpg",0,62,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",2.11692071,"stim_960/crop_250x250_sun_btqfwjbhoozewfgq.jpg",1,63,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.76804328,"stim_960/crop_250x250_sun_aalcoddsgakiyibg.jpg",1,64,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.20032835,"stim_960/crop_250x250_sun_atykjblkgiyxntgq.jpg",0,65,"high","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.867697716,"stim_960/crop_250x250_sun_afsyxgxnohystmgi.jpg",1,66,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","j",2.484216928,"stim_960/crop_250x250_sun_akusqfibksdvoawq.jpg",0,67,"low","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.96568203,"stim_960/crop_250x250_sun_avdmefqpprnmxupg.jpg",1,68,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.401163816,"stim_960/crop_250x250_sun_aofnryafpsjimzsb.jpg",0,69,"high","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",2.396644831,"stim_960/crop_250x250_sun_azonedpbjxvthsky.jpg",0,70,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.215283155,"stim_960/crop_250x250_sun_atugmikryhdkwajt.jpg",1,71,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",2.115872622,"stim_960/crop_250x250_sun_bownuaawqmwbnibc.jpg",0,72,"high","old","fa",1,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",0.784910202,"stim_960/crop_250x250_sun_afnlqvwkwxzqrpdh.jpg",0,73,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","f",2.016906023,"stim_960/crop_250x250_sun_athfvucdzfqnfvgd.jpg",1,74,"low","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.650366068,"stim_960/crop_250x250_sun_bzlzamvegzzipimi.jpg",1,75,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","k",1.699671268,"stim_960/crop_250x250_sun_abyiyeuqrsvwitmv.jpg",0,76,"med","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",1.967180014,"stim_960/crop_250x250_sun_azuyyjttninlteru.jpg",1,77,"med","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.10114336,"stim_960/crop_250x250_sun_aiyalzseuasbmcgo.jpg",1,78,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",1.514285088,"stim_960/crop_250x250_sun_aqaewvbhhynrfzan.jpg",0,79,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","s",1.501388788,"stim_960/crop_250x250_sun_aniffsqbhcmlohle.jpg",1,80,"high","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.868138552,"stim_960/crop_250x250_sun_akspuxuprmycjbzx.jpg",1,81,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.933849096,"stim_960/crop_250x250_sun_aqpvskxpfspvkhkd.jpg",1,82,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.133893013,"stim_960/crop_250x250_sun_airmhzekczqjmoip.jpg",1,83,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.53446126,"stim_960/crop_250x250_sun_ahlnckxipvrpeecd.jpg",1,84,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","j",2.39926815,"stim_960/crop_250x250_sun_bnfymkpsfvlcpzav.jpg",0,85,"low","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.402906179,"stim_960/crop_250x250_sun_axunojwviwturtow.jpg",0,86,"low","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_aecfbrbgsenqtxlr.jpg",1,87,NA,NA,NA,NA,NA,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.251094103,"stim_960/crop_250x250_sun_apwykefkcjmlpyrc.jpg",1,88,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.698390484,"stim_960/crop_250x250_sun_aansqzlgnhefrncx.jpg",1,89,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.434791327,"stim_960/crop_250x250_sun_avakvbhlgspksfrj.jpg",0,90,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","s",2.266109943,"stim_960/crop_250x250_sun_bfqjssbcvpehzeqx.jpg",0,91,"high","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.503472328,"stim_960/crop_250x250_sun_bhmobjmqpgpvncsu.jpg",0,92,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","j",1.622297049,"stim_960/crop_250x250_sun_dghkcazouakburpx.jpg",0,93,"low","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.215438604,"stim_960/crop_250x250_sun_bssoogmkirrqttps.jpg",0,94,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","k",2.048940182,"stim_960/crop_250x250_sun_bwlzfivhqgrlogyb.jpg",0,95,"med","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","s",1.44994235,"stim_960/crop_250x250_sun_agkxyzqbvmqmjjzd.jpg",1,96,"high","new","miss",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.033653736,"stim_960/crop_250x250_sun_aeumszouksnprjbc.jpg",1,97,"high","old","hit",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.833534002,"stim_960/crop_250x250_sun_alxgiquxasscgojn.jpg",0,98,"med","new","cr",0,0,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","l",1.366259336,"stim_960/crop_250x250_sun_appghxwikhuqfyec.jpg",0,99,"high","old","fa",1,1,1,1
+"sub25","lib","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","j",1.59736228,"stim_960/crop_250x250_sun_bwlpiiezzmxkpaqq.jpg",1,100,"low","old","hit",0,0,1,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",3.33285284,"stim_960/crop_250x250_sun_bflktkazczzevnym.jpg",0,101,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.383064032,"stim_960/crop_250x250_sun_bmwynupgkajrlncb.jpg",1,102,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.002180815,"stim_960/crop_250x250_sun_azuhocffiewaclbr.jpg",1,103,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",1.433920383,"stim_960/crop_250x250_sun_byucbgapqogfuewo.jpg",0,104,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","j",1.850517273,"stim_960/crop_250x250_sun_auivqeofcjiivouz.jpg",0,105,"low","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.317352533,"stim_960/crop_250x250_sun_aqtqbutzkcbcphlk.jpg",0,106,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",1.352041721,"stim_960/crop_250x250_sun_bnambgtmkpxecama.jpg",1,107,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",2.267793417,"stim_960/crop_250x250_sun_blcdeumhvwjyquay.jpg",0,108,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","f",2.384334564,"stim_960/crop_250x250_sun_akqsdxddvmslsxnx.jpg",1,109,"low","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.003969669,"stim_960/crop_250x250_sun_aeexsesuteinmrkd.jpg",1,110,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.517590523,"stim_960/crop_250x250_sun_bidynayttggijsik.jpg",0,111,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",1.683147907,"stim_960/crop_250x250_sun_anvkfcutrkvomvdw.jpg",1,112,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","s",2.816301107,"stim_960/crop_250x250_sun_bzfseyklrfuglrgl.jpg",1,113,"high","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.316792011,"stim_960/crop_250x250_sun_aawpgifyijsllvxu.jpg",0,114,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.304720879,"stim_960/crop_250x250_sun_bodfpkvmehnyrrnq.jpg",0,115,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.152173042,"stim_960/crop_250x250_sun_agoguzkkenixxlzt.jpg",1,116,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","d",2.086586237,"stim_960/crop_250x250_sun_asqdmjznrgeuozvr.jpg",1,117,"med","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.769019365,"stim_960/crop_250x250_sun_afzegunopjnmhyrn.jpg",1,118,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.951764584,"stim_960/crop_250x250_sun_avqgbgkailyzaypu.jpg",1,119,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",2.685799122,"stim_960/crop_250x250_sun_acozztgrmnbuasww.jpg",0,120,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.482279539,"stim_960/crop_250x250_sun_bapxkpvrhpjplsok.jpg",0,121,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",1.872437954,"stim_960/crop_250x250_sun_argikopryamoycho.jpg",0,122,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","f",1.483369827,"stim_960/crop_250x250_sun_apcpouobuwmelwjh.jpg",1,123,"low","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.851743937,"stim_960/crop_250x250_sun_aqbdgfyhwlnictys.jpg",1,124,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.966950178,"stim_960/crop_250x250_sun_atsbgaqdvbgtmqrm.jpg",1,125,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",1.804484367,"stim_960/crop_250x250_sun_bqtwjctetrfnpwao.jpg",1,126,"med","new","miss",1,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",0.964100361,"stim_960/crop_250x250_sun_afpkjgdryoqdhjwd.jpg",0,127,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",0.939116716,"stim_960/crop_250x250_sun_aijydzosjpwlhawn.jpg",0,128,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","f",1.501484156,"stim_960/crop_250x250_sun_astflcqkpgwhijva.jpg",1,129,"low","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.035403013,"stim_960/crop_250x250_sun_buuqqlaulkzkzcxm.jpg",0,130,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.732409954,"stim_960/crop_250x250_sun_bjatlfrtfdzefnbi.jpg",0,131,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.070171833,"stim_960/crop_250x250_sun_aeitnrvrgwtrygvm.jpg",1,132,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",2.26279521,"stim_960/crop_250x250_sun_aiosulrwozsoiytw.jpg",1,133,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",2.486586571,"stim_960/crop_250x250_sun_aonwrxbsslvhwjnf.jpg",0,134,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",4.648265362,"stim_960/crop_250x250_sun_atywrdlolftszdme.jpg",1,135,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",2.73843646,"stim_960/crop_250x250_sun_adtyzljipqzazheo.jpg",0,136,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.821044922,"stim_960/crop_250x250_sun_aamiyliwblodnsuk.jpg",0,137,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.909900904,"stim_960/crop_250x250_sun_bfifgcsvelgjagpf.jpg",1,138,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",3.637214899,"stim_960/crop_250x250_sun_aosyuqrdvrzuvzpq.jpg",1,139,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",2.143661499,"stim_960/crop_250x250_sun_atyhdrbzwlmyxvwx.jpg",0,140,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.026819229,"stim_960/crop_250x250_sun_abriguhrihnxbuzz.jpg",1,141,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","d",2.023131371,"stim_960/crop_250x250_sun_azwjmmjcrzmohzju.jpg",1,142,"med","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.850985527,"stim_960/crop_250x250_sun_aoufgidjpgeuekbq.jpg",0,143,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.916878462,"stim_960/crop_250x250_sun_aterybljccyjzxzb.jpg",1,144,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.422534943,"stim_960/crop_250x250_sun_bhavnevyzhxissyk.jpg",0,145,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",2.016109228,"stim_960/crop_250x250_sun_abommhzkchdtwdbv.jpg",0,146,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.416937828,"stim_960/crop_250x250_sun_axmjtjejzqzkpjkb.jpg",0,147,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.085949659,"stim_960/crop_250x250_sun_bzzeagtdrtygsgtb.jpg",1,148,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","s",2.192291498,"stim_960/crop_250x250_sun_awqbzmkauftvbtvx.jpg",1,149,"high","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.857425928,"stim_960/crop_250x250_sun_bpltpfbvyqffysnn.jpg",1,150,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.402267933,"stim_960/crop_250x250_sun_bpybzzkgntswgjeh.jpg",0,151,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","j",1.971123457,"stim_960/crop_250x250_sun_aealqblonaayscfd.jpg",1,152,"low","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.818669796,"stim_960/crop_250x250_sun_askwjrgbdoigufoe.jpg",0,153,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",2.768244267,"stim_960/crop_250x250_sun_axbnumewvwjwkjsq.jpg",0,154,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","s",2.56798172,"stim_960/crop_250x250_sun_azvpjxecxcwpdjvt.jpg",1,155,"high","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",3.360812902,"stim_960/crop_250x250_sun_axnmiskqeqsbxvwp.jpg",0,156,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",1.011790514,"stim_960/crop_250x250_sun_bslosgmmufogvxbl.jpg",1,157,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",2.536327362,"stim_960/crop_250x250_sun_askcmeswzpuycbhl.jpg",0,158,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.062997341,"stim_960/crop_250x250_sun_avugjhxcklppsxoy.jpg",0,159,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","j",2.390772104,"stim_960/crop_250x250_sun_bvidjioqfgqoilej.jpg",0,160,"low","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","f",1.883804798,"stim_960/crop_250x250_sun_arxchddkbqmylhbx.jpg",1,161,"low","new","miss",1,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",2.090584755,"stim_960/crop_250x250_sun_asqnahttiotbwvuz.jpg",1,162,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",2.623834372,"stim_960/crop_250x250_sun_apmlyipbsglqvkch.jpg",1,163,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.819874525,"stim_960/crop_250x250_sun_aohqndqhgvigryia.jpg",0,164,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","j",1.290957928,"stim_960/crop_250x250_sun_bwcurrikaapbcdqt.jpg",0,165,"low","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","f",4.100164175,"stim_960/crop_250x250_sun_bwhouqfrxtkncvfp.jpg",1,166,"low","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.930887699,"stim_960/crop_250x250_sun_aomdgugbauosfnuw.jpg",1,167,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",0.768579721,"stim_960/crop_250x250_sun_afwyxdxheffelwew.jpg",0,168,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.750051498,"stim_960/crop_250x250_sun_ambzssctzlkjvtor.jpg",0,169,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","d",1.350544691,"stim_960/crop_250x250_sun_bkhuvtsqontzwtbo.jpg",1,170,"med","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.713407516,"stim_960/crop_250x250_sun_afdsljnlukkhgcwy.jpg",0,171,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","k",1.993144751,"stim_960/crop_250x250_sun_bukcuisqaggvnjqe.jpg",1,172,"med","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.662333488,"stim_960/crop_250x250_sun_bqgedgybfyjagbdn.jpg",0,173,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_bikeivxzrhfrabjh.jpg",0,174,NA,NA,NA,NA,NA,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.10635829,"stim_960/crop_250x250_sun_bnbmrulcrvycyshn.jpg",1,175,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.08250165,"stim_960/crop_250x250_sun_asqjyzzeqytukhbv.jpg",0,176,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.82569313,"stim_960/crop_250x250_sun_bgzxjwmmyuqvhhqv.jpg",1,177,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","j",1.957874537,"stim_960/crop_250x250_sun_acywtbbwhlcbjvhp.jpg",1,178,"low","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","d",3.413576126,"stim_960/crop_250x250_sun_bgyehazlnlqldiyq.jpg",1,179,"med","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.116503954,"stim_960/crop_250x250_sun_bxoalispsxdszcgq.jpg",0,180,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.514881611,"stim_960/crop_250x250_sun_aqsnphjfqqbvpxpi.jpg",0,181,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","d",2.7835958,"stim_960/crop_250x250_sun_bvpwctedcdxoikod.jpg",1,182,"med","new","miss",1,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",2.583535671,"stim_960/crop_250x250_sun_aaukizaoqeduzuhj.jpg",0,183,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.734277248,"stim_960/crop_250x250_sun_agfygjmyxvgdxedj.jpg",0,184,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",0,"incorrect",77952,"test","f",1.918702841,"stim_960/crop_250x250_sun_anbfltmluhftxjpy.jpg",1,185,"low","new","miss",1,1,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.072748184,"stim_960/crop_250x250_sun_alehoecobeqbicmb.jpg",0,186,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",4.776687384,"stim_960/crop_250x250_sun_avdinfqmmrsuwrvg.jpg",1,187,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.60850811,"stim_960/crop_250x250_sun_aaafwyzcrfjzemqe.jpg",0,188,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.434440136,"stim_960/crop_250x250_sun_ahfotrnmjzhcxffs.jpg",1,189,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_agezzvykvnrpwjcm.jpg",0,190,NA,NA,NA,NA,NA,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","l",1.793279171,"stim_960/crop_250x250_sun_azzykuxbcfcfdpbu.jpg",0,191,"high","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.960286379,"stim_960/crop_250x250_sun_bgmzqhpudcoaqlfi.jpg",1,192,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","d",1.991691828,"stim_960/crop_250x250_sun_adixhxbuoldhwrqg.jpg",0,193,"med","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","k",1.131920099,"stim_960/crop_250x250_sun_aqtcnaqeceaoenqf.jpg",0,194,"med","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Incorrect",0,"incorrect",77952,"test","j",1.382810354,"stim_960/crop_250x250_sun_aemppezpagjwlqpx.jpg",0,195,"low","old","fa",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","f",1.968013763,"stim_960/crop_250x250_sun_apgfadnhepzlxqcj.jpg",0,196,"low","new","cr",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.134801865,"stim_960/crop_250x250_sun_aiqqedheilymtjxn.jpg",1,197,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.551482916,"stim_960/crop_250x250_sun_byqwzogbirgscxsj.jpg",1,198,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",0.960054874,"stim_960/crop_250x250_sun_bxbynfkyucpwhxjb.jpg",1,199,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","false_feed","Correct",1,"correct",77952,"test","l",1.767742872,"stim_960/crop_250x250_sun_aqmdtwukxpmlvmda.jpg",1,200,"high","old","hit",0,0,2,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",2.263988018,"stim_960/crop_250x250_sun_aoistmfpopaeodtn.jpg",1,1,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",1.133946896,"stim_960/crop_250x250_sun_bjtarzsygcsdcswt.jpg",1,2,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",2.034626722,"stim_960/crop_250x250_sun_anqzlrbhmtpjoxcr.jpg",1,3,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.873544931,"stim_960/crop_250x250_sun_aqiscrxlszhmojfb.jpg",1,4,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",2.866277933,"stim_960/crop_250x250_sun_autvanooobxeqmke.jpg",0,5,"low","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",2.787467241,"stim_960/crop_250x250_sun_apifewbehpnolkvp.jpg",1,6,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.088478327,"stim_960/crop_250x250_sun_ahdhbbgjgvzpfwkf.jpg",1,7,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.089736223,"stim_960/crop_250x250_sun_byyfgjwyqhcftrnv.jpg",0,8,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",0.043463945,"stim_960/crop_250x250_sun_bunakwaceqmfnrtv.jpg",1,9,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.249330997,"stim_960/crop_250x250_sun_bmtnhoeymsbotabs.jpg",1,10,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.00809145,"stim_960/crop_250x250_sun_btiueqdveedlwmoc.jpg",1,11,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",0.045335293,"stim_960/crop_250x250_sun_btsqfalwsqicirdz.jpg",1,12,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.898274183,"stim_960/crop_250x250_sun_asixhfuwkzyxcmzo.jpg",1,13,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",0.163169861,"stim_960/crop_250x250_sun_alqfzieozzyajmmu.jpg",1,14,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_bpgfqhqsxojcdjid.jpg",1,15,NA,NA,NA,NA,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",1.271963596,"stim_960/crop_250x250_sun_bwxvlohgchaaplon.jpg",0,16,"low","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.586774111,"stim_960/crop_250x250_sun_axvnhjliovthmykr.jpg",1,17,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.395038128,"stim_960/crop_250x250_sun_atwrteetaflufghx.jpg",1,18,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",1.282096624,"stim_960/crop_250x250_sun_bddevinxoznkgydx.jpg",1,19,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",3.234744549,"stim_960/crop_250x250_sun_bnubmqjgebuhtskp.jpg",0,20,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.110434294,"stim_960/crop_250x250_sun_azfexbrpukiuwvsa.jpg",1,21,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.361108303,"stim_960/crop_250x250_sun_bbcnbxoeqremrknk.jpg",0,22,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.223773956,"stim_960/crop_250x250_sun_dgnvmjbmfgbzfryg.jpg",1,23,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.818511724,"stim_960/crop_250x250_sun_amyymxsglckykhin.jpg",1,24,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.911208153,"stim_960/crop_250x250_sun_aeldkedqeopyedlo.jpg",1,25,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",0.846143246,"stim_960/crop_250x250_sun_axyungxcivupuloh.jpg",1,26,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.242674589,"stim_960/crop_250x250_sun_bqskjimrqipwehbu.jpg",0,27,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.935027599,"stim_960/crop_250x250_sun_absylnhohxklptge.jpg",0,28,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.201044559,"stim_960/crop_250x250_sun_azlhjcsmvipsytid.jpg",1,29,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.835695744,"stim_960/crop_250x250_sun_alnmkzvpbbcszhnl.jpg",1,30,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",1.966429949,"stim_960/crop_250x250_sun_agvakjyhqviyjqpm.jpg",0,31,"high","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",1.320931911,"stim_960/crop_250x250_sun_azoclxlugzevfdyb.jpg",1,32,"low","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",1.393200159,"stim_960/crop_250x250_sun_bgivzozuwzewtpmv.jpg",1,33,"low","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.833954811,"stim_960/crop_250x250_sun_afkhtqimdkotqcxr.jpg",0,34,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.957581997,"stim_960/crop_250x250_sun_abocxtxdgguupemx.jpg",0,35,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.768101454,"stim_960/crop_250x250_sun_akpglyltypxsdfiw.jpg",1,36,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.821969509,"stim_960/crop_250x250_sun_bwgiqmsowqjaftpn.jpg",1,37,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.934902191,"stim_960/crop_250x250_sun_aajjwitecnmjptil.jpg",0,38,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",4.416896105,"stim_960/crop_250x250_sun_abkxgivwkttteybv.jpg",0,39,"high","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",1.781591654,"stim_960/crop_250x250_sun_aigvrszgqctccfbi.jpg",1,40,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.466203451,"stim_960/crop_250x250_sun_adyjrpdyuokcretf.jpg",1,41,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",2.101641893,"stim_960/crop_250x250_sun_bmrmpvkcdxamvxgl.jpg",1,42,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",4.250792503,"stim_960/crop_250x250_sun_bgowkzjgkaoczcdm.jpg",1,43,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",3.549946308,"stim_960/crop_250x250_sun_anrniihbiohjxtwb.jpg",1,44,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.027166367,"stim_960/crop_250x250_sun_boypnjthbnliuuyp.jpg",1,45,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.771872997,"stim_960/crop_250x250_sun_bvewelgxucntjgbl.jpg",1,46,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.83436203,"stim_960/crop_250x250_sun_bldssykpwnnzbacg.jpg",0,47,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.74498105,"stim_960/crop_250x250_sun_aphmidkbizkcemje.jpg",1,48,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",3.283793926,"stim_960/crop_250x250_sun_adcpntvpskmemljf.jpg",0,49,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.300866842,"stim_960/crop_250x250_sun_arqpcamhidrgqrjl.jpg",0,50,"med","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.300917864,"stim_960/crop_250x250_sun_adephxvrriwlbwfd.jpg",1,51,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.90011549,"stim_960/crop_250x250_sun_bshizzpqntlilzdr.jpg",1,52,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","f",2.662747622,"stim_960/crop_250x250_sun_bgkhiaxinqmyajsc.jpg",1,53,"low","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.150823116,"stim_960/crop_250x250_sun_auyrlmepctzodbkx.jpg",1,54,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.092945337,"stim_960/crop_250x250_sun_afcopmcttyehenti.jpg",0,55,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.10095191,"stim_960/crop_250x250_sun_axhaoimtzrleovgn.jpg",1,56,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.176002264,"stim_960/crop_250x250_sun_aedzyylvwjdibale.jpg",1,57,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.184912682,"stim_960/crop_250x250_sun_awvfnogmotsvhofs.jpg",1,58,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","s",2.266789198,"stim_960/crop_250x250_sun_abvoiyibggyeyzwa.jpg",1,59,"high","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.292287827,"stim_960/crop_250x250_sun_alaoxkdoftpxwxef.jpg",1,60,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.207831383,"stim_960/crop_250x250_sun_bfxxrahijmwbrmfe.jpg",0,61,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.817252636,"stim_960/crop_250x250_sun_budkwhtnvsdohdls.jpg",1,62,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.934292078,"stim_960/crop_250x250_sun_cbvixxpcxxiviqwb.jpg",1,63,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",1.682311058,"stim_960/crop_250x250_sun_akcxxbgqrapnmrqt.jpg",0,64,"high","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.542596817,"stim_960/crop_250x250_sun_almpskoasdhbvxct.jpg",1,65,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.793460846,"stim_960/crop_250x250_sun_bvuiyyxkrpjmqfgt.jpg",1,66,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.934374809,"stim_960/crop_250x250_sun_bszcewbgthxuwucx.jpg",1,67,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.934562206,"stim_960/crop_250x250_sun_bxnhsewtdbapkkkh.jpg",0,68,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.399982929,"stim_960/crop_250x250_sun_bzybqfaecwsubwwo.jpg",1,69,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","f",2.491495371,"stim_960/crop_250x250_sun_aqbfpcskqyrxpzwg.jpg",1,70,"low","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.901459455,"stim_960/crop_250x250_sun_adpgrybewrpybgau.jpg",1,71,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.310472727,"stim_960/crop_250x250_sun_bphmhtgvemdpurhp.jpg",1,72,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.101153135,"stim_960/crop_250x250_sun_alebzmoyvsbtyuzj.jpg",1,73,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.95717907,"stim_960/crop_250x250_sun_agqyrnfcrhqdixow.jpg",1,74,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.100819111,"stim_960/crop_250x250_sun_amnhwroeswkmvooh.jpg",1,75,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",1.424057245,"stim_960/crop_250x250_sun_bllrmzpqvfqlwbjc.jpg",0,76,"low","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",3.04011178,"stim_960/crop_250x250_sun_biooeoxxpwzatfxn.jpg",1,77,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.873707294,"stim_960/crop_250x250_sun_ampojsohunzdzmkl.jpg",1,78,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.650125027,"stim_960/crop_250x250_sun_bcrgrktmnwzihbbn.jpg",0,79,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.294332743,"stim_960/crop_250x250_sun_brfgmdwkmorsuswa.jpg",1,80,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.242919207,"stim_960/crop_250x250_sun_bvijaozwmknwtzzs.jpg",1,81,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.049527884,"stim_960/crop_250x250_sun_bvgbpebuomjgorwh.jpg",1,82,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","f",0.967183828,"stim_960/crop_250x250_sun_aotwhhmzcyiwovbg.jpg",1,83,"low","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.051287651,"stim_960/crop_250x250_sun_bviajiduymaivwil.jpg",0,84,"high","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.270758152,"stim_960/crop_250x250_sun_dzkzmfwcisrqjfef.jpg",0,85,"med","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",0.910473585,"stim_960/crop_250x250_sun_btslbdkuhizidarp.jpg",1,86,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",0.884498596,"stim_960/crop_250x250_sun_apdhxxfqzmlzawza.jpg",1,87,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.267731905,"stim_960/crop_250x250_sun_aiwrdruheoptanfr.jpg",0,88,"med","new","cr",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.127201557,"stim_960/crop_250x250_sun_abxihwnodrvfwxvj.jpg",1,89,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",1.428501844,"stim_960/crop_250x250_sun_apesguqjdshwxcuu.jpg",1,90,"low","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",2.352812529,"stim_960/crop_250x250_sun_bwywxrxqjwnmappn.jpg",1,91,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.077194214,"stim_960/crop_250x250_sun_acfhvnhjryjapmun.jpg",1,92,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.051373482,"stim_960/crop_250x250_sun_aujheubvrugyvfip.jpg",1,93,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",1.451151609,"stim_960/crop_250x250_sun_ahantcwvhxkfskmq.jpg",1,94,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",2.377169847,"stim_960/crop_250x250_sun_azvviyhxoiurrgjs.jpg",1,95,"low","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",2.330360889,"stim_960/crop_250x250_sun_agkazmikqpviiqhw.jpg",0,96,"med","old","fa",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.15550518,"stim_960/crop_250x250_sun_bzchwfwrobmpjpnk.jpg",1,97,"high","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.150838614,"stim_960/crop_250x250_sun_andjfhlxbnkzigxe.jpg",1,98,"med","new","miss",1,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",0.912064075,"stim_960/crop_250x250_sun_bgkedhsgzyptkdkv.jpg",1,99,"med","old","hit",0,NA,1,1
+"sub25","con","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.172855854,"stim_960/crop_250x250_sun_adruzdfgtjdnkzpl.jpg",1,100,"high","old","hit",0,NA,1,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.927847624,"stim_960/crop_250x250_sun_aiqaejfiqlbzpvlv.jpg",0,101,"med","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",3.798261166,"stim_960/crop_250x250_sun_aejyxdohiroeftuh.jpg",0,102,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.76810813,"stim_960/crop_250x250_sun_bryztocyrvzexvhn.jpg",1,103,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",2.453495979,"stim_960/crop_250x250_sun_aokelocziccpmsao.jpg",1,104,"low","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.434111834,"stim_960/crop_250x250_sun_aaxbaiaxheakjfls.jpg",0,105,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.832190514,"stim_960/crop_250x250_sun_avnwlayijwcxbkkn.jpg",0,106,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.969398022,"stim_960/crop_250x250_sun_bmnfyehaljzgfcdy.jpg",0,107,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.268949747,"stim_960/crop_250x250_sun_bqrbnivgizwzythz.jpg",0,108,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",3.317890882,"stim_960/crop_250x250_sun_avxsgsyijuoaykkw.jpg",1,109,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",2.019585133,"stim_960/crop_250x250_sun_arauaqcrycofkrba.jpg",1,110,"med","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.650721788,"stim_960/crop_250x250_sun_buvykoheoycnlkpr.jpg",0,111,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",2.800338507,"stim_960/crop_250x250_sun_aczdzqmzpjdfrgcw.jpg",0,112,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.166574955,"stim_960/crop_250x250_sun_axyociycgdyxtpgs.jpg",0,113,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.132310867,"stim_960/crop_250x250_sun_bgwdwaeuakbmuxeg.jpg",1,114,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",3.599473,"stim_960/crop_250x250_sun_bxycjwwbalxcbzgv.jpg",1,115,"med","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",1.133246899,"stim_960/crop_250x250_sun_bywzqqwjjbimtgos.jpg",1,116,"med","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",1.383093119,"stim_960/crop_250x250_sun_bnhmupioivfsjszz.jpg",0,117,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",1.833925247,"stim_960/crop_250x250_sun_bpzylelzifbozomg.jpg",0,118,"high","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.466497421,"stim_960/crop_250x250_sun_abfntiruonnefmkt.jpg",0,119,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",3.050647736,"stim_960/crop_250x250_sun_alrpogjtpupcphrl.jpg",0,120,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.5651052,"stim_960/crop_250x250_sun_ayunjwkxglkvxbky.jpg",1,121,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",3.689110518,"stim_960/crop_250x250_sun_bexscdkjkitwacrr.jpg",0,122,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",1.069691658,"stim_960/crop_250x250_sun_begcwwrgqilefbhm.jpg",1,123,"med","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.681529999,"stim_960/crop_250x250_sun_aldgcxgpgvsbrleg.jpg",0,124,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",2.163227797,"stim_960/crop_250x250_sun_btlcswgskgigwvyo.jpg",0,125,"low","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",3.513756752,"stim_960/crop_250x250_sun_atckadetzztuszgd.jpg",1,126,"low","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",4.861918926,"stim_960/crop_250x250_sun_aogzprhesvaowchg.jpg",0,127,"high","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",3.518749714,"stim_960/crop_250x250_sun_bsjjzpuovqzmabso.jpg",0,128,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",4.178389072,"stim_960/crop_250x250_sun_aglcbstlmlnyvxsm.jpg",0,129,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","f",2.349616051,"stim_960/crop_250x250_sun_aclyhpwocwrhanrp.jpg",1,130,"low","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.104227781,"stim_960/crop_250x250_sun_ajndqdyznuhfagyc.jpg",0,131,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.468543768,"stim_960/crop_250x250_sun_bnlxdnssurodlmsn.jpg",0,132,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",3.278749466,"stim_960/crop_250x250_sun_dptwbzrnpsrzwusv.jpg",0,133,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.600461006,"stim_960/crop_250x250_sun_aboyxwazwtfsyjyo.jpg",1,134,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.828432083,"stim_960/crop_250x250_sun_bfshnonieptsyhdk.jpg",0,135,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.119609356,"stim_960/crop_250x250_sun_aihqdwhvnlhqyioi.jpg",1,136,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","j",2.678076982,"stim_960/crop_250x250_sun_bdznjwwrmdjlegjg.jpg",1,137,"low","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.956771612,"stim_960/crop_250x250_sun_akdtrnaahlswfapk.jpg",0,138,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_aivvmlhqwyrckldf.jpg",0,139,NA,NA,NA,NA,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.483901262,"stim_960/crop_250x250_sun_acuknuzasunvayhe.jpg",0,140,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",2.184719801,"stim_960/crop_250x250_sun_ajigtsysjsdcsqcg.jpg",0,141,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.468580723,"stim_960/crop_250x250_sun_bcuyptricipypmsv.jpg",1,142,"med","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",2.600729704,"stim_960/crop_250x250_sun_bmdsgxjnccxhulbx.jpg",0,143,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",3.734554291,"stim_960/crop_250x250_sun_akcvxhoknclnmywc.jpg",0,144,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.084465504,"stim_960/crop_250x250_sun_bgmohqgkakpljvfr.jpg",0,145,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",3.368483782,"stim_960/crop_250x250_sun_acrvfhoznsvpqqki.jpg",0,146,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",3.34998703,"stim_960/crop_250x250_sun_brctimtxepjxylcw.jpg",0,147,"med","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",4.217903137,"stim_960/crop_250x250_sun_axsbnsloehmsxgsj.jpg",0,148,"high","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.43449831,"stim_960/crop_250x250_sun_aaafvavryivlwifa.jpg",0,149,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",2.150087833,"stim_960/crop_250x250_sun_auorvpdkldstfwzm.jpg",0,150,"med","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",3.550683737,"stim_960/crop_250x250_sun_arntsqsnqxvvkddr.jpg",0,151,"low","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",3.94812417,"stim_960/crop_250x250_sun_awuebqqlrzfbouuh.jpg",0,152,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.8504076,"stim_960/crop_250x250_sun_airyypykbhawlcdg.jpg",0,153,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.249135971,"stim_960/crop_250x250_sun_apgvksiyjlymdahg.jpg",0,154,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_azormqvbtsuiermz.jpg",0,155,NA,NA,NA,NA,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",2.283272028,"stim_960/crop_250x250_sun_anleokaxzrssdvaa.jpg",1,156,"med","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.199718237,"stim_960/crop_250x250_sun_byqzsbjjddcqumkj.jpg",0,157,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","k",2.216520071,"stim_960/crop_250x250_sun_bkvwtqfhjrmnoevg.jpg",1,158,"med","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",1.519173145,"stim_960/crop_250x250_sun_aagzczontectgtzw.jpg",0,159,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.433659792,"stim_960/crop_250x250_sun_ahexirkpjzfagrwd.jpg",0,160,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","s",2.103415966,"stim_960/crop_250x250_sun_avhjajgakctzamtv.jpg",0,161,"high","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.783617258,"stim_960/crop_250x250_sun_bwglbjuawrjhznyc.jpg",1,162,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",3.819150448,"stim_960/crop_250x250_sun_bldtfsjgucnsectf.jpg",0,163,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",3.399829865,"stim_960/crop_250x250_sun_bunttxyyyhduoarg.jpg",0,164,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.054359198,"stim_960/crop_250x250_sun_bvjncyzdjhaglgwz.jpg",0,165,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.384190798,"stim_960/crop_250x250_sun_bommnycdukjoaebq.jpg",0,166,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.032468796,"stim_960/crop_250x250_sun_arojedleumvhwjrr.jpg",0,167,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.33229208,"stim_960/crop_250x250_sun_aehrxlcgvaxbjncd.jpg",0,168,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.983606815,"stim_960/crop_250x250_sun_amfsjptppwehailc.jpg",0,169,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.117237091,"stim_960/crop_250x250_sun_dvewarqrtkbkmgyz.jpg",1,170,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.817239046,"stim_960/crop_250x250_sun_adxgztesnsoefwfy.jpg",0,171,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",1.600229979,"stim_960/crop_250x250_sun_bnysspswzwmkkpur.jpg",0,172,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",2.633245945,"stim_960/crop_250x250_sun_bvwibgcryrkgjsmv.jpg",0,173,"low","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",4.232714415,"stim_960/crop_250x250_sun_avdopgvwdhrurjcy.jpg",1,174,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.933627367,"stim_960/crop_250x250_sun_axfrnvedypprgcuw.jpg",0,175,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.083482742,"stim_960/crop_250x250_sun_arafivcpstddakic.jpg",1,176,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.583633661,"stim_960/crop_250x250_sun_afnhqsvitfkwavgx.jpg",0,177,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.399354219,"stim_960/crop_250x250_sun_akfvnliigcmmyjeg.jpg",0,178,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","f",2.399403095,"stim_960/crop_250x250_sun_aajmgjyzfecnphxv.jpg",0,179,"low","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.41682148,"stim_960/crop_250x250_sun_aosrvqqpxdzdexoo.jpg",0,180,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.016797781,"stim_960/crop_250x250_sun_axpbgigeunjjmamw.jpg",0,181,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","d",1.921424389,"stim_960/crop_250x250_sun_aybzlyzpoyecgwuw.jpg",1,182,"med","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.965834618,"stim_960/crop_250x250_sun_axojsnrljlaqhbfl.jpg",0,183,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.917415142,"stim_960/crop_250x250_sun_aglwwpjrtjdgrbsy.jpg",0,184,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.101109505,"stim_960/crop_250x250_sun_dipnjbcttxthxuuz.jpg",0,185,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",1.266304493,"stim_960/crop_250x250_sun_bawthjvxlzohljzi.jpg",1,186,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",1.397175789,"stim_960/crop_250x250_sun_aaxspwgpppcwlqht.jpg",0,187,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.485291243,"stim_960/crop_250x250_sun_btkpnmclzeougwrr.jpg",0,188,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","l",2.517556906,"stim_960/crop_250x250_sun_behkudbtildxehgt.jpg",1,189,"high","old","hit",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_avqunfgcvwvpixql.jpg",0,190,NA,NA,NA,NA,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",0.76508832,"stim_960/crop_250x250_sun_beckjnuehzsncnuk.jpg",0,191,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.463252068,"stim_960/crop_250x250_sun_aqgzfdprxduzlqsg.jpg",0,192,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.654173613,"stim_960/crop_250x250_sun_aygpryooqjsqnucr.jpg",0,193,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",1,"None",77952,"test","d",2.302072763,"stim_960/crop_250x250_sun_azrrdcfxsnsxfbva.jpg",0,194,"med","new","cr",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","j",2.270056486,"stim_960/crop_250x250_sun_aiqtvlvgyhotrdhm.jpg",0,195,"low","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","k",1.700986624,"stim_960/crop_250x250_sun_avbfinnawppgcfiw.jpg",0,196,"med","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.249570608,"stim_960/crop_250x250_sun_aboyipfhipqhyoyt.jpg",0,197,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",2.618024826,"stim_960/crop_250x250_sun_byighnkhpwdrxtdc.jpg",0,198,"high","old","fa",1,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","f",3.382409573,"stim_960/crop_250x250_sun_bsjfulszwhyylulo.jpg",1,199,"low","new","miss",0,NA,2,1
+"sub25","lib","s d f","j k l","strategic","(no feedback)",0,"None",77952,"test","l",1.937402487,"stim_960/crop_250x250_sun_agukajieweipdhom.jpg",0,200,"high","old","fa",1,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.716716766,"stim_960/crop_250x250_sun_addxblijtvdwyadx.jpg",0,1,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.084320784,"stim_960/crop_250x250_sun_addzzixbkmhdvaqb.jpg",1,2,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.052206755,"stim_960/crop_250x250_sun_amohixccoikqdhga.jpg",1,3,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.50172472,"stim_960/crop_250x250_sun_ajuopgcqzceavmmx.jpg",1,4,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",1.432242393,"stim_960/crop_250x250_sun_arimgqxstenosggo.jpg",1,5,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",2.766907215,"stim_960/crop_250x250_sun_aaxcotuvffvjsikf.jpg",1,6,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.017290115,"stim_960/crop_250x250_sun_axjaepmfmdfwvmkm.jpg",0,7,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",1.399536133,"stim_960/crop_250x250_sun_bxueibjqhjhofylo.jpg",0,8,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.850583553,"stim_960/crop_250x250_sun_alomxlxlepqmnzlv.jpg",0,9,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",2.470434427,"stim_960/crop_250x250_sun_akkfggabccreupfj.jpg",0,10,"high","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.112577438,"stim_960/crop_250x250_sun_bhqtupvykffrtauv.jpg",0,11,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.769712925,"stim_960/crop_250x250_sun_atfudzdjdouzqtgp.jpg",0,12,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",2.468049049,"stim_960/crop_250x250_sun_btvagbkdykfzyogo.jpg",1,13,"high","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.219781876,"stim_960/crop_250x250_sun_bzcbxolklaomimic.jpg",0,14,"high","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.100543976,"stim_960/crop_250x250_sun_bmoihfsgnetgnxsv.jpg",1,15,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",3.161932707,"stim_960/crop_250x250_sun_bnztqcwxvkvsqyjv.jpg",0,16,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.189611435,"stim_960/crop_250x250_sun_bitfemoyfnqrfpcb.jpg",1,17,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.636738777,"stim_960/crop_250x250_sun_bdorjdkzsoqggxrp.jpg",1,18,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",4.062523127,"stim_960/crop_250x250_sun_assimjbzplzrmjlf.jpg",0,19,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",3.062917233,"stim_960/crop_250x250_sun_bptlmvwqwyqzgxzb.jpg",0,20,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.200706482,"stim_960/crop_250x250_sun_almaaskihaggmyfm.jpg",1,21,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",3.200783253,"stim_960/crop_250x250_sun_azqujubxrxbpahiy.jpg",1,22,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.833792448,"stim_960/crop_250x250_sun_akztgbltwhgthazd.jpg",1,23,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.221430779,"stim_960/crop_250x250_sun_aunotsppoopgxyab.jpg",1,24,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.282372236,"stim_960/crop_250x250_sun_akbtkdpnkijjclye.jpg",1,25,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.237405539,"stim_960/crop_250x250_sun_aanszwuidyonrpfe.jpg",0,26,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",2.850198984,"stim_960/crop_250x250_sun_ajoaabvgwtuaiajl.jpg",0,27,"low","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",2.381331205,"stim_960/crop_250x250_sun_bwhrtbwsdnjnxntp.jpg",1,28,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",2.151091814,"stim_960/crop_250x250_sun_dwqkgnrsektjoyjo.jpg",0,29,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_apvsixqcsthhjgjh.jpg",0,30,NA,NA,NA,NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.830895662,"stim_960/crop_250x250_sun_bnokdnghzxvmtwjh.jpg",0,31,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.186437368,"stim_960/crop_250x250_sun_buyfbsqbnohcytfb.jpg",1,32,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.634269953,"stim_960/crop_250x250_sun_auhemqpumlryxwua.jpg",0,33,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",3.297515392,"stim_960/crop_250x250_sun_aapvetvklmiuqbqt.jpg",0,34,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.201630831,"stim_960/crop_250x250_sun_azzmdmbpwjjiosby.jpg",1,35,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",3.053071499,"stim_960/crop_250x250_sun_alzsoxwramqwsaju.jpg",1,36,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",3.054121256,"stim_960/crop_250x250_sun_ajgyfjxpwhoxuimc.jpg",1,37,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.285888672,"stim_960/crop_250x250_sun_afnjycgmhddqoirw.jpg",0,38,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",1.517686129,"stim_960/crop_250x250_sun_biclrokyjyalssnp.jpg",1,39,"high","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.735618353,"stim_960/crop_250x250_sun_anwbnpebwnccduyr.jpg",1,40,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.586521626,"stim_960/crop_250x250_sun_brhimvbpaeqssgyb.jpg",1,41,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.934246302,"stim_960/crop_250x250_sun_arvzopcyvrklmmqg.jpg",0,42,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",2.101389408,"stim_960/crop_250x250_sun_bgztutxlbisetcoy.jpg",1,43,"low","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.318517447,"stim_960/crop_250x250_sun_ankjheqejixzkapp.jpg",1,44,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.450017691,"stim_960/crop_250x250_sun_cafqbxwabdpxmiex.jpg",0,45,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",2.817700148,"stim_960/crop_250x250_sun_afknhoxoxepsyzku.jpg",0,46,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",2.652414799,"stim_960/crop_250x250_sun_aurdknabghwknvon.jpg",0,47,"low","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",2.633069992,"stim_960/crop_250x250_sun_acaovloebynquipm.jpg",1,48,"low","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.066483974,"stim_960/crop_250x250_sun_aaynajkjfdceyllq.jpg",1,49,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.701109409,"stim_960/crop_250x250_sun_acfkaobymiptdeij.jpg",1,50,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.018532276,"stim_960/crop_250x250_sun_dqhbnkldvcwhjinp.jpg",1,51,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",3.620464563,"stim_960/crop_250x250_sun_ahttvbqiuqabbtze.jpg",0,52,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.630858183,"stim_960/crop_250x250_sun_asxbugixaohtycom.jpg",0,53,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",3.900786877,"stim_960/crop_250x250_sun_agpnlwgnbyfierva.jpg",0,54,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.252813101,"stim_960/crop_250x250_sun_adnvqdckimyapvud.jpg",1,55,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",2.980708599,"stim_960/crop_250x250_sun_aiiukajalbxcrkmj.jpg",1,56,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",3.385151863,"stim_960/crop_250x250_sun_abfgoadggoomtdlx.jpg",0,57,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.368430138,"stim_960/crop_250x250_sun_aayqqqhaitxweuow.jpg",0,58,"high","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.951095581,"stim_960/crop_250x250_sun_aelszmshjwdadpej.jpg",1,59,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.036230087,"stim_960/crop_250x250_sun_axnxsxjyejsnqpri.jpg",0,60,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",2.502150059,"stim_960/crop_250x250_sun_altrukzktpnnqdop.jpg",1,61,"low","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.884501696,"stim_960/crop_250x250_sun_bzzvbegxtfxrnaqh.jpg",1,62,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.484009504,"stim_960/crop_250x250_sun_aystbgnpxnqwtpod.jpg",1,63,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",3.170168877,"stim_960/crop_250x250_sun_adjomgliyafgagay.jpg",0,64,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.983882904,"stim_960/crop_250x250_sun_bcahyrkwrplyvadm.jpg",1,65,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.3852036,"stim_960/crop_250x250_sun_atguzzmidyyhepbj.jpg",0,66,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.601866245,"stim_960/crop_250x250_sun_bfjmgnmhpykhczoi.jpg",0,67,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",3.167544127,"stim_960/crop_250x250_sun_dsbaecrloukrfwnu.jpg",1,68,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",1.702023983,"stim_960/crop_250x250_sun_ajwwedpyfvppskhc.jpg",0,69,"low","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",3.116924763,"stim_960/crop_250x250_sun_aqvxyxlxwxaszdax.jpg",1,70,"med","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.61777091,"stim_960/crop_250x250_sun_azpsldqtiznehyie.jpg",0,71,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.95135498,"stim_960/crop_250x250_sun_bjykannhiwsikdcl.jpg",1,72,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.890246153,"stim_960/crop_250x250_sun_apjpviixevgticma.jpg",1,73,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.46630621,"stim_960/crop_250x250_sun_agmsdauwzdvelcue.jpg",1,74,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",3.61626339,"stim_960/crop_250x250_sun_bhjkdzyanfwwoikt.jpg",0,75,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.350350857,"stim_960/crop_250x250_sun_asqvoutvhrenapud.jpg",0,76,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",1.30082202,"stim_960/crop_250x250_sun_asensxajiuddxrju.jpg",1,77,"high","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.701461792,"stim_960/crop_250x250_sun_bhlevndgxznywqit.jpg",1,78,"low","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",1.683778524,"stim_960/crop_250x250_sun_bqbpfllbkayyqmah.jpg",0,79,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.21840167,"stim_960/crop_250x250_sun_bwpdouozbmspfqvo.jpg",1,80,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",3.333333254,"stim_960/crop_250x250_sun_ahzjxraxhsptnhvi.jpg",0,81,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",3.134161472,"stim_960/crop_250x250_sun_abjztzybzqmdlmsx.jpg",1,82,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.432577848,"stim_960/crop_250x250_sun_amoocwqjzogrlvru.jpg",0,83,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",4.982960463,"stim_960/crop_250x250_sun_aewgnmpbmjettspd.jpg",0,84,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",1.351208925,"stim_960/crop_250x250_sun_acrmewentugfvobh.jpg",0,85,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.151555777,"stim_960/crop_250x250_sun_aeezrtsodsqlrybn.jpg",1,86,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",4.901079416,"stim_960/crop_250x250_sun_ctgmvpilqsxxstjy.jpg",0,87,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",2.082877874,"stim_960/crop_250x250_sun_babpgmtgcbwhdtls.jpg",1,88,"med","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",3.653206348,"stim_960/crop_250x250_sun_azkqjrhrtqswdoxf.jpg",0,89,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.451891184,"stim_960/crop_250x250_sun_blyypyotuwnfoila.jpg",1,90,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",4.133631468,"stim_960/crop_250x250_sun_ahrccgjcegxtmpaf.jpg",0,91,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.464899063,"stim_960/crop_250x250_sun_alwuoiefepifbttr.jpg",0,92,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.138819456,"stim_960/crop_250x250_sun_abenqoeveajkfutc.jpg",0,93,"high","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",3.484696388,"stim_960/crop_250x250_sun_amrsltollarnzjhe.jpg",0,94,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.320528507,"stim_960/crop_250x250_sun_agbbjhszdqvwoplk.jpg",0,95,"med","old","fa",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.329813242,"stim_960/crop_250x250_sun_alooqmtszpkslbsp.jpg",1,96,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",4.584587574,"stim_960/crop_250x250_sun_atxzbztrahvcfmzh.jpg",0,97,"low","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.019104004,"stim_960/crop_250x250_sun_arercolrlalmaphv.jpg",1,98,"high","old","hit",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.266982555,"stim_960/crop_250x250_sun_bthnehnrbwlwuyzt.jpg",0,99,"med","new","cr",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",0.832319736,"stim_960/crop_250x250_sun_bsbrbyfeyqglziyx.jpg",1,100,"high","new","miss",NA,NA,1,1
+"sub25","NONE","s d f","j k l","true_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_biulaymzjmpeujus.jpg",0,101,NA,NA,NA,NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",2.070367575,"stim_960/crop_250x250_sun_aogqynprwogazobf.jpg",1,102,"high","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.021218061,"stim_960/crop_250x250_sun_anpmxumahspwbtxi.jpg",0,103,"high","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.385782719,"stim_960/crop_250x250_sun_bnzcizmmlzirjubc.jpg",0,104,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.33921361,"stim_960/crop_250x250_sun_arlashgcjwqeaqyn.jpg",1,105,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.984345198,"stim_960/crop_250x250_sun_aalxbocnraukuels.jpg",1,106,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",1.205508232,"stim_960/crop_250x250_sun_azdryefopyyfbhrj.jpg",1,107,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.640182257,"stim_960/crop_250x250_sun_alhpayzdsgjitybh.jpg",0,108,"med","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",0.948360443,"stim_960/crop_250x250_sun_abpknumpgandhers.jpg",0,109,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",3.023027897,"stim_960/crop_250x250_sun_araslbvuijbtgxnc.jpg",0,110,"med","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",4.305378199,"stim_960/crop_250x250_sun_bursogyeljvlegan.jpg",0,111,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",1.22139883,"stim_960/crop_250x250_sun_agixllqdggtcvfjg.jpg",0,112,"med","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.063851118,"stim_960/crop_250x250_sun_alegkmyagowenmtp.jpg",0,113,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.859874964,"stim_960/crop_250x250_sun_bdbaouuoaqxigtav.jpg",0,114,"high","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.732339859,"stim_960/crop_250x250_sun_ayaxtpkahorvupfi.jpg",0,115,"low","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.494705439,"stim_960/crop_250x250_sun_awbdnqwzjqjvwodk.jpg",0,116,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.935125589,"stim_960/crop_250x250_sun_arvpgwpavjvkwstl.jpg",1,117,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",3.131224155,"stim_960/crop_250x250_sun_bctsdtqgzjlmoiqr.jpg",0,118,"low","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.095724821,"stim_960/crop_250x250_sun_bmcbruugofjvhrns.jpg",0,119,"med","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",0.884554863,"stim_960/crop_250x250_sun_aezlcpiiixquwunh.jpg",0,120,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",4.19328928,"stim_960/crop_250x250_sun_awzysuhoevbmubzo.jpg",1,121,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_axsfqltggswfxdwq.jpg",0,122,NA,NA,NA,NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",1.277979612,"stim_960/crop_250x250_sun_bqedfphswjlioclk.jpg",1,123,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",3.362151146,"stim_960/crop_250x250_sun_abpycgxuwcrdvhuu.jpg",0,124,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.534172058,"stim_960/crop_250x250_sun_amdcxerufskxypsd.jpg",0,125,"high","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.967207432,"stim_960/crop_250x250_sun_advcbifupoybibnf.jpg",1,126,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.935388327,"stim_960/crop_250x250_sun_bolktopxbwkzofff.jpg",0,127,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.050797701,"stim_960/crop_250x250_sun_atoxsvogavkjqccy.jpg",1,128,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",2.824468374,"stim_960/crop_250x250_sun_axijdxoblvdpaham.jpg",1,129,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",1.474272013,"stim_960/crop_250x250_sun_apcsdvctssbmwyxt.jpg",0,130,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.283804178,"stim_960/crop_250x250_sun_bjlmzdshfkrokwvh.jpg",1,131,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",1.901883364,"stim_960/crop_250x250_sun_akcpndqhwknhjosc.jpg",0,132,"high","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.315950632,"stim_960/crop_250x250_sun_atblxqdtlxfkdoge.jpg",1,133,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.877474785,"stim_960/crop_250x250_sun_awarwrlqylvdclwt.jpg",1,134,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",1.578073978,"stim_960/crop_250x250_sun_ayzxqewbmznobnnr.jpg",1,135,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.493435144,"stim_960/crop_250x250_sun_bbgwudiijvfdvnqx.jpg",1,136,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.744639158,"stim_960/crop_250x250_sun_aomzbprctpzqwjzj.jpg",0,137,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.325235367,"stim_960/crop_250x250_sun_adcphrizvfpljiqt.jpg",1,138,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",3.801952362,"stim_960/crop_250x250_sun_avxrwsizuzyevdei.jpg",0,139,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.467220306,"stim_960/crop_250x250_sun_aqgyhjmhrchjnset.jpg",1,140,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",2.084842205,"stim_960/crop_250x250_sun_axathcwojxbimwhx.jpg",1,141,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.443768024,"stim_960/crop_250x250_sun_basracuwuovndlhn.jpg",0,142,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",1.276934624,"stim_960/crop_250x250_sun_aqbkdhsqwlbyjfuo.jpg",1,143,"high","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.284824133,"stim_960/crop_250x250_sun_btdrjjoqsojitivt.jpg",1,144,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_basbaxlzyvnheule.jpg",0,145,NA,NA,NA,NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",1.441348791,"stim_960/crop_250x250_sun_algykmlzsooyrtkq.jpg",1,146,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.943078518,"stim_960/crop_250x250_sun_aqjesvxuhiltafjy.jpg",1,147,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",2.208515406,"stim_960/crop_250x250_sun_aismwztcmdyhphdl.jpg",0,148,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.384113789,"stim_960/crop_250x250_sun_aqaxyvljrmfradja.jpg",1,149,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.824050665,"stim_960/crop_250x250_sun_bawbdnpssirlklqm.jpg",0,150,"low","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.174652338,"stim_960/crop_250x250_sun_baypsbxibtrbdebz.jpg",1,151,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",1.517448664,"stim_960/crop_250x250_sun_bdyamcykodavylyu.jpg",0,152,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.241374493,"stim_960/crop_250x250_sun_axjhsdjyllouksze.jpg",0,153,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.983148336,"stim_960/crop_250x250_sun_brgzapucixrdgkwo.jpg",0,154,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",1.793472528,"stim_960/crop_250x250_sun_agejiykszzxghogs.jpg",1,155,"high","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.017237663,"stim_960/crop_250x250_sun_aueqsqlofgnzzjpb.jpg",1,156,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.542705059,"stim_960/crop_250x250_sun_bdldoyellnkuiajt.jpg",1,157,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.641115665,"stim_960/crop_250x250_sun_ajnnfxfjtqunbkix.jpg",1,158,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",3.184261084,"stim_960/crop_250x250_sun_bekkgqphzbclwpvb.jpg",1,159,"low","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.967336416,"stim_960/crop_250x250_sun_bynvixeqqtyoizkb.jpg",1,160,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",1.217735529,"stim_960/crop_250x250_sun_bjrybzofjeatfohs.jpg",1,161,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.434024334,"stim_960/crop_250x250_sun_bmpkaepywxyluvhc.jpg",0,162,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",1.68366909,"stim_960/crop_250x250_sun_acmnzyfioumygcxw.jpg",1,163,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.300130129,"stim_960/crop_250x250_sun_asgomthzhszqqxeb.jpg",1,164,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.241241693,"stim_960/crop_250x250_sun_aykzsqbmnbagajmt.jpg",0,165,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",2.350445271,"stim_960/crop_250x250_sun_atywuilkvmucftxf.jpg",1,166,"low","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.907345057,"stim_960/crop_250x250_sun_awmehuarebvlloxn.jpg",1,167,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",4.902686119,"stim_960/crop_250x250_sun_bqghfwajnaodublp.jpg",0,168,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",2.367578983,"stim_960/crop_250x250_sun_aqgacvwdxdtdqlha.jpg",1,169,"high","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.04028511,"stim_960/crop_250x250_sun_agmgihamcjawuvxw.jpg",1,170,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.150887489,"stim_960/crop_250x250_sun_aqbpxkehkldgzkth.jpg",1,171,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",3.243500471,"stim_960/crop_250x250_sun_aaqpnflqrtytzzzo.jpg",0,172,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.449548244,"stim_960/crop_250x250_sun_aiqflnsoednmhvce.jpg",0,173,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","s",4.101457834,"stim_960/crop_250x250_sun_airxobbhilzhuucf.jpg",0,174,"high","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.182754517,"stim_960/crop_250x250_sun_agykezddunignjwr.jpg",1,175,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.649627686,"stim_960/crop_250x250_sun_advnulrvmgmovfue.jpg",0,176,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","f",2.632350206,"stim_960/crop_250x250_sun_aknrjiemzmaqrgpa.jpg",1,177,"low","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",2.518180609,"stim_960/crop_250x250_sun_atrhnuznnjugkheq.jpg",0,178,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.410813808,"stim_960/crop_250x250_sun_avsybrnkffwvyviy.jpg",0,179,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",4.544549465,"stim_960/crop_250x250_sun_alztlntdspbjiinb.jpg",1,180,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.325871706,"stim_960/crop_250x250_sun_bzwwygxzfnzcejmu.jpg",0,181,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","s",2.400840998,"stim_960/crop_250x250_sun_bwdpazktqjgrirtm.jpg",1,182,"high","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",0.988772392,"stim_960/crop_250x250_sun_agmritdmlgvntpxt.jpg",1,183,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","f",2.818544388,"stim_960/crop_250x250_sun_afbuvewoxohljrol.jpg",0,184,"low","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","l",1.411652088,"stim_960/crop_250x250_sun_boijvmhhockpnlze.jpg",1,185,"high","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","k",2.051284552,"stim_960/crop_250x250_sun_aytkkeihgczwwznh.jpg",0,186,"med","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",0.988319874,"stim_960/crop_250x250_sun_azuedjyjxqpnftws.jpg",0,187,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",1.933144808,"stim_960/crop_250x250_sun_aueujrlumbuekblo.jpg",0,188,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",3.071751118,"stim_960/crop_250x250_sun_axtdwqkxxzlpnfhh.jpg",1,189,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","(timeout)",999,"timeout",77952,"test","[]",NA,"stim_960/crop_250x250_sun_ahohxawujzpxyhoi.jpg",0,190,NA,NA,NA,NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",1.49589467,"stim_960/crop_250x250_sun_axlnzunivbfhtoqg.jpg",1,191,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","j",2.451222897,"stim_960/crop_250x250_sun_avesoizwcqbojcvm.jpg",1,192,"low","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","l",0.995395422,"stim_960/crop_250x250_sun_aqxypnffmypblepf.jpg",0,193,"high","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",1.85049367,"stim_960/crop_250x250_sun_aspthzcufmasxjtq.jpg",0,194,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",1.684817791,"stim_960/crop_250x250_sun_bmocvxrcwvusapee.jpg",0,195,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","j",2.200618505,"stim_960/crop_250x250_sun_aztealninlgnxltb.jpg",0,196,"low","old","fa",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",1.406376839,"stim_960/crop_250x250_sun_aiocgpnpkhlkxubk.jpg",1,197,"med","old","hit",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","d",2.066188335,"stim_960/crop_250x250_sun_auqfjexkzazrqfuk.jpg",0,198,"med","new","cr",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Incorrect",0,"incorrect",77952,"test","d",4.76356411,"stim_960/crop_250x250_sun_aozgrrqzvwxjtopx.jpg",1,199,"med","new","miss",NA,NA,2,1
+"sub25","NONE","s d f","j k l","true_feed","Correct",1,"correct",77952,"test","k",2.71663475,"stim_960/crop_250x250_sun_ausfyiowltnoreil.jpg",1,200,"med","old","hit",NA,NA,2,1

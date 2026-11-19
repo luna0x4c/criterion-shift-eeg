@@ -1,0 +1,98 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-05-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(foreign)
+library(tidyverse)
+library(ggplot2)
+library(conflicted)
+
+set.seed(5183)
+
+select = dplyr::select
+filter = dplyr::filter
+recode = dplyr::recode
+rename = dplyr::rename
+
+`%nin%` = Negate(`%in%`)
+```
+
+
+```{r}
+
+# for 60 & 61: manually updated subID column 
+subinfo = data.frame(session_time = character(),
+                     subID = character(),
+                     task_1 = character(),
+                     task_2 = character(),
+                     strategic_cond_1 = character(),
+                     strategic_cond_2 = character(),
+                     false_feed_cond_1 = character(),
+                     false_feed_cond_2 = character())
+
+filelist = list.files(path="/Users/lunarneko/Library/Mobile Documents/com~apple~CloudDocs/School/[Lab]/False feedback/false_feed_eeg/data_beh/data_raw/",pattern="*.csv",full.names = TRUE)
+dflist = lapply(filelist, read.csv)
+
+
+for (i in 1:length(dflist)) {
+  df = dflist[[i]]
+  
+  # exclude subj with no EEG data
+  if (str_detect(filelist[i],"NO EEG DATA 766812")) {
+    #df$subID = "48_NO_EEG"  # the next subj is 48
+    next
+  } 
+  
+  time = df$date[1]
+  
+  if ("subID" %in% names(df)) {
+    id = df$subID[1] %>% as.character()
+    if (id == "NA" | is.na(id)) {
+      stop("Missing subID! Manually fill in subID in csv file")
+    }
+    else if (id=="55adj") {
+      id="55"
+    } 
+  }
+  
+  task_cond_marker = df %>% 
+    mutate(i_row = row_number()) %>% 
+    group_by(curr_task,curr_cond) %>% slice(1) %>%   # use slice() instead of unique() to keep original row number (order of blocks)
+    select(i_row,subID,curr_task,n_cond,curr_cond) %>% arrange(i_row) %>% 
+    filter(curr_task %in% c("false_feed","strategic")) 
+  
+  task_order = c(task_cond_marker$curr_task[1],task_cond_marker$curr_task[3]) 
+  
+  prob_conds = task_cond_marker %>% filter(curr_task == "strategic") %>% arrange(i_row)
+  prob_cond_order = c(prob_conds$curr_cond[1],prob_conds$curr_cond[2])
+  
+  fpf_conds = task_cond_marker %>% filter(curr_task == "false_feed") %>% arrange(i_row)
+  fpf_cond_order = c(fpf_conds$curr_cond[1],fpf_conds$curr_cond[2])
+
+
+  
+  this_sub = data.frame(subID = id, session_time = time,
+                        task_1 = task_order[1],
+                        task_2 = task_order[2],
+                        strategic_cond_1 = prob_cond_order[1],
+                        strategic_cond_2 = prob_cond_order[2],
+                        false_feed_cond_1 = fpf_cond_order[1],
+                        false_feed_cond_2 = fpf_cond_order[2])
+  subinfo = rbind(subinfo,this_sub)
+  
+}
+
+subinfo = subinfo %>% arrange(session_time,subID) %>% 
+  rename(sub = subID) %>% 
+  mutate(task_0 = "true_feed") %>% 
+  relocate(task_0, .before=task_1)
+
+write.csv(subinfo,"subinfo_for_eeg.csv",row.names=FALSE)
+
+```
+

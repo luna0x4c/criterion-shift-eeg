@@ -1,0 +1,1475 @@
+---
+title: "Compute SDT indices for behavioral data"
+output: 
+  html_document:
+    toc: true
+    toc_float: true 
+    df_print: paged 
+author: Luna Li | luna.0x4c@gmail.com
+---
+
+**Last updated: `r Sys.Date()`**
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+
+knitr::opts_hooks$set(eval = function(options) {
+  # echo=F whenever eval=F; overrides echo=T
+  if (isFALSE(options$eval)) options$echo=FALSE; options})
+
+library(foreign)
+library(openxlsx)
+library(readxl)
+library(tidyverse)
+library(data.table)    #fread
+library(dplyr)
+library(stringr)
+library(stringi)
+library(vctrs)
+library(pander)
+library(ggplot2)
+library(ggrepel)
+library(ggdist)
+library(ggforce)
+library(ggpubr)
+library(ggpmisc)
+library(ggh4x)   # `facet_nested()`
+library(lmerTest)
+library(lm.beta)
+library(emmeans)
+library(brms)
+library(ordinal)
+library(cocor)
+library(grid)
+library(gridExtra)
+library(cowplot)
+library(patchwork)
+library(flextable)
+
+set.seed(5183)
+
+mutate = dplyr::mutate
+select = dplyr::select
+recode = dplyr::recode
+rename = dplyr::rename
+
+`%nin%` = Negate(`%in%`)
+
+today = Sys.Date()
+
+source("sdt.R")
+
+# unicode for delta: \u0394; Δ works in png export but not pdf; 
+# use `expression(paste(Delta), normaltext)` in pdf OR `device=cairo_pdf`
+
+libcon_colors <- c("#386cb0","#fec44f", "gray") 
+
+save_csv = F   # rewrite csv export
+save_des = F   # rewrite descriptives table
+save_fig = F   # redo ggsave
+save_model = F # rewrite model output 
+
+# global model params - to keep consistent with erp analysis
+emm_options(lmer.df = "satterthwaite")
+adjust = "holm"
+```
+
+
+# load data & get sdt
+```{r load subj csv, get sdt}
+i=0
+
+dir = list.files(path="../data_clean",pattern="*.csv",full.names = TRUE)
+alltrials <- trials <- sdt_out <- sdt_out_full <- sdt_base_out <- cshift_out <- NULL
+
+for (i in 1:length(dir)) {
+  
+  trials_full = read.csv(dir[i]) %>%  
+    rename(task=curr_task, cond=curr_cond) %>% 
+    mutate(test_half = ifelse(i_trial %in% c(1:50,101:150), 1, 2)) %>% 
+    # pretend true_feed test1 is con, test2 is lib [alphabetical order] 
+    # this is for calculating cshift ONLY
+    mutate(cond = case_when(task=="true_feed" & test_block==1 ~ "con",
+                            task=="true_feed" & test_block==2 ~ "lib",
+                            TRUE ~ cond)) %>% 
+    # format task/cond labeling
+    mutate(task = case_when(task == "strategic" & cue_flip == 0 ~ "StrategicTrue",
+                            task == "strategic" & cue_flip == 1 ~ "StrategicReversed",
+                            task == "true_feed" ~ "Baseline",
+                            task == "false_feed" ~ "FPF"),
+           task0 = ifelse(str_detect(task,"Strategic"),"Strategic",task),
+           cond = case_when(cond == "lib" ~ "Lib",
+                            cond == "con" ~ "Con")) %>% 
+    mutate(task0 = factor(task0, levels=c("Baseline","FPF","Strategic")),
+           task  = factor(task,  levels=c("Baseline","FPF","StrategicTrue","StrategicReversed")),
+           cue   = factor(cue_flip, levels=c(0,1), labels=c("True","Reversed"))) %>% 
+    relocate(task0,.before=task) %>% 
+    relocate(cue,  .before=cue_flip)
+  
+  if ("X" %in% names(trials_full)) {
+    trials_full = trials_full %>% select(-X)
+  }
+  
+  subID = trials_full$subID[1]
+  
+  trials_full %>% count(resp_type,conf)
+  
+  zroc = trials_full %>% prep_conf_counts() %>% get_zroc_s(.) %>% 
+    mutate(subID = subID) %>% select(subID,s,rsq)
+  s_subj = zroc$s[1]
+  zroc_rsq = zroc$rsq[1]
+  
+  if (is.na(s_subj) | zroc_rsq==0) {
+    s_subj = 0.8
+    warning("No linear fit, default to s = 0.8: ",subID,"\n")
+    #stop("Check lm fit\n")   # turn on if debugging NAs
+  } else if (zroc_rsq < 0.9) {
+    s_subj = 0.8
+    warning("Poor linear fit, default to s = 0.8: ",subID,"\n")
+    #warning(paste0("R-squared = ",round(zroc_rsq,4), ": ",subID, " s = ",round(s_subj,3),"\n"))
+    #stop()
+  }
+  
+  # sub37(i=33), sub49(i=46), sub62(i=59), sub72(i=68) <- poor fit due to only using two ends of scale
+  
+  alltrials[[i]] = trials_full   # all trials
+  trials[[i]] = trials_full %>% filter(!(task=="FPF" & test_half==1))  # trials without first half FPF
+  
+  # all SDT indices should use trials without first half FPF;
+  # conf over time should use all trials
+  sdt = trials[[i]] %>% 
+    group_by(subID,cue_flip,cue,task0,task,cond) %>% prep_sdt %>% get_sdt(s = s_subj) %>% 
+    mutate(s_subj = s_subj, zroc_rsq = zroc_rsq)
+  
+  sdt_full = alltrials[[i]] %>%   # for descriptives only
+    group_by(subID,cue_flip,cue,task0,task,cond) %>% prep_sdt %>% get_sdt(s = s_subj) %>% 
+    mutate(s_subj = s_subj, zroc_rsq = zroc_rsq)
+  
+  sdt_base = trials[[i]] %>% filter(task=="Baseline") %>%  # baseline pooled
+    group_by(subID,cue_flip,cue,task0,task) %>% prep_sdt %>% get_sdt(s = s_subj) %>% 
+    mutate(s_subj = s_subj, zroc_rsq = zroc_rsq)
+  
+  cshift = sdt %>% select(subID,cue_flip,cue,task0,task,cond,c2) %>% 
+    pivot_wider(names_from=cond, values_from=c2) %>% 
+    mutate(cshift = Con-Lib)
+  
+  sdt_out[[i]] = sdt
+  sdt_out_full[[i]] = sdt_full
+  sdt_base_out[[i]] = sdt_base
+  cshift_out[[i]] = cshift
+  
+}
+
+alltrials_df = bind_rows(alltrials)    # [export] all trials
+trials_df = bind_rows(trials)          # [main] all trials minus FPF first half
+
+sdt_df = bind_rows(sdt_out)            # [main] sdt 
+allsdt_df = bind_rows(sdt_out_full)    # sdt using all trials
+sdt_base_df = bind_rows(sdt_base_out)  # sdt for baseline neutral collapsed (no cond/block) 
+
+cshift_df = bind_rows(cshift_out)      # [main] cshift
+
+head(alltrials_df)
+head(sdt_df)
+
+```
+
+**NOTE:**
+- strategic task on-screen old/new base rate cue:
+- `cue_flip`: 0=same onscreen base rate as real (experienced) base rate, 1=opposite
+- `cue`: true/reversed [in this order] 
+- assigned BY PARTICIPANT, useful sorting redundancy for `task`
+- task:
+- `task0`: baseline, FPF, strategic [in this order]
+- `task`: baseline, FPF, strategic true, strategic reversed [in this order]
+- cond: con >> lib [alphabetical order] 
+- text factors in "pretty" version when feasible 
+
+```{r export csv, echo=FALSE}
+#save_csv=TRUE
+if (isTRUE(save_csv)) {
+  write.csv(alltrials_df,"../data_clean_alltrials.csv",row.names=FALSE) # `data_clean` folder reserved for individual subj csv files
+  
+  write.csv(sdt_df,"../subj_summary/sdt.csv", row.names = FALSE)
+  write.csv(allsdt_df,"../subj_summary/sdt_all.csv", row.names = FALSE)
+  write.csv(sdt_base_df,"../subj_summary/sdt_baseline.csv", row.names = FALSE)
+  
+  write.csv(cshift_df,  "../subj_summary/cshift.csv", row.names = FALSE)
+}
+
+alltrials_df %>% count(subID,task,cond,studied)
+```
+
+
+```{r taskcond labels}
+# text labels for figure sections
+task_labels = c(Baseline="Baseline", FPF="FPF",
+                StrategicTrue="Strategic (true cue)", 
+                StrategicReversed="Strategic (reversed cue)")
+cond_labels = c(Con="Con", Lib="Lib", Neutral="Neutral", 
+                Neutral1="Neutral 1", Neutral2="Neutral 2")
+
+```
+
+
+
+# descriptives
+```{r descriptives table}
+# does not need cue_flip info
+
+n_des = sdt_df %>% select(subID,task) %>% unique() %>% count(task) 
+
+sdt_descriptive = sdt_df %>% 
+  select(subID,task,cond,medRT,raw_hr,raw_far,n_isfpf,percent_fpf, da,c2) %>% 
+  group_by(task,cond) %>% 
+  mutate(medRT = medRT*1000) %>% 
+  summarise(across(where(is.numeric),
+                   list(mean = ~mean(.x, na.rm=TRUE),
+                        sd = ~sd(.x, na.rm=TRUE)),
+                   .names="{.col}_{.fn}"),
+            .groups="drop") 
+
+allfpf_descriptive = allsdt_df %>% 
+  filter(task=="FPF") %>% select(subID,task,cond,n_isfpf,percent_fpf) %>% 
+  rename(alln_isfpf = n_isfpf,
+         allpercent_fpf = percent_fpf) %>% 
+  group_by(task,cond) %>% 
+  summarise(across(where(is.numeric),
+                   list(mean = ~mean(.x, na.rm=TRUE),
+                        sd = ~sd(.x, na.rm=TRUE)),
+                   .names="{.col}_{.fn}"),
+            .groups="drop") 
+
+cshift_descriptive = cshift_df %>% select(subID,task,cshift) %>% 
+  group_by(task) %>% 
+  summarise(cshift_mean=mean(cshift),
+            cshift_sd = sd(cshift),
+            .groups="drop") 
+
+desc_table_raw = merge(sdt_descriptive,cshift_descriptive, all=TRUE) %>% 
+  merge(allfpf_descriptive,all=TRUE) %>% 
+  mutate(across(contains("n_isfpf"), ~ifelse(.x==0, NA, .x)),
+         across(contains("percent_fpf"), ~ifelse(is.nan(.x), NA, .x)))
+
+desc_table_out = desc_table_raw %>% 
+  transmute(task,cond,
+            medRT = sprintf("%.1f (%.1f)",medRT_mean,medRT_sd),
+            hr = sprintf("%.2f (%.2f)",raw_hr_mean,raw_hr_sd),
+            far = sprintf("%.2f (%.2f)",raw_far_mean,raw_far_sd),
+            n_isfpf = sprintf("%.1f (%.1f)",n_isfpf_mean,n_isfpf_sd),
+            percent_fpf = sprintf("%.2f (%.2f)",percent_fpf_mean,percent_fpf_sd),
+            alln_isfpf = sprintf("%.1f (%.1f)",alln_isfpf_mean,alln_isfpf_sd),
+            allpercent_fpf = sprintf("%.2f (%.2f)",allpercent_fpf_mean,allpercent_fpf_sd),
+            da = sprintf("%.2f (%.2f)",da_mean,da_sd),
+            c2 = sprintf("%.2f (%.2f)",c2_mean,c2_sd),
+            cshift = sprintf("%.2f (%.2f)",cshift_mean,cshift_sd)) %>% 
+  mutate(across(contains("fpf"), ~ifelse(str_detect(.x,"NA"), NA, .x))) %>% 
+  merge(n_des) %>% 
+  arrange(task,cond)
+
+desc_table_out  # formatted
+
+# quick power/sensitivity analysis
+#library(pwr)
+#pwr.r.test(n=74, sig.level=0.05, power=0.8, alternative = "two.sided")
+```
+
+
+```{r export descriptives table, echo=TRUE}
+if (isTRUE(save_des)) {
+  write.xlsx(desc_table_out,"../tables/descriptives_raw.xlsx")
+  save_as_docx(flextable(desc_table_out),path="../tables/descriptives_raw.docx")
+}
+```
+
+# misc functions 
+
+```{r effsize function}
+# get cohen's d
+get_eff = function(model, model_contrast, method=NULL) {
+  # model object, contrast object, pairs list (optional)
+  sigma = sqrt(sum(as.data.frame(VarCorr(model))$vcov))   # standardizer for d [aka total SD]
+  edf = df.residual(model)
+  
+  eff = eff_size(model_contrast, sigma=sigma, edf=edf, method="identity")
+  
+  return(eff)
+}
+```
+
+
+```{r X contrast matrix, eval=FALSE}
+# # contrast list for taskcond 
+# # double check factor levels!! [BaselineNeutral = reference, then alphabetical: FPFcon, FPFlib, scon, slib]
+# taskcond2_list = list(
+#   # compare against baseline
+#   base  = list("FPFcon - base" = c(-1,1,0,0,0,0,0), 
+#                "FPFlib - base" = c(-1,0,1,0,0,0,0),
+#                "s_truecon - base" = c(-1,0,0,1,0,0,0), 
+#                "s_truelib - base" = c(-1,0,0,0,1,0,0),
+#                "s_revcon - base" = c(-1,0,0,0,0,1,0), 
+#                "s_revlib - base" = c(-1,0,0,0,0,0,1)),
+#   # within task
+#   within  = list("FPF con-lib"    = c(0,1,-1,0,0,0,0), 
+#                  "strue con-lib" = c(0,0,0,1,-1,0,0),
+#                  "srev con-lib"   = c(0,0,0,0,0,1,-1)),
+#   # between task
+#   between = list("con FPF-strue" = c(0,1,0,-1,0,0,0), 
+#                  "lib FPF-strue" = c(0,0,1,0,-1,0,0),
+#                  "con FPF-srev"   = c(0,1,0,0,0,-1,0), 
+#                  "lib FPF-srev"   = c(0,0,1,0,0,0,-1)))
+# 
+# print_contrast = function(emm) {
+#   contrast_base    = summary(contrast(emm, method=taskcond2_list$base),     adjust=adjust)
+#   contrast_within  = summary(contrast(emm, method=taskcond2_list$within),   adjust=adjust)
+#   contrast_between = summary(contrast(emm, method=taskcond2_list$between),  adjust=adjust)
+#   
+#   print(contrast_base)
+#   print(contrast_within)
+#   print(contrast_between)
+# }
+
+```
+
+
+```{r contrast matrix}
+# taskcond2 levels: BaselineNeutral, FPFCon, FPFLib, StrategicCon, StrategicLib
+# [!!!] `| cue` to compare WITHIN cue group
+
+taskcond2_list = list(
+  # compare against baseline
+  base    = list("FPFcon - base" = c(-1,1,0,0,0), 
+                 "FPFlib - base" = c(-1,0,1,0,0),
+                 "scon - base"   = c(-1,0,0,1,0), 
+                 "slib - base"   = c(-1,0,0,0,1)),
+  # within task
+  within  = list("FPF con-lib"       = c(0,1,-1,0,0), 
+                 "strategic con-lib" = c(0,0,0,1,-1)),
+  # between task
+  between = list("con FPF-strategic" = c(0,1,0,-1,0), 
+                 "lib FPF-strategic" = c(0,0,1,0,-1)))
+
+# group differences on ~taskcond2*cue grid 
+cue_list = list("strategic con-lib true-rev" = c(0,0,0,1,-1,  0,0,0,-1,1),   # [!!!!!]
+                "con strategic true-rev"     = c(0,0,0,1,0,   0,0,0,-1,0),
+                "lib strategic true-rev"     = c(0,0,0,0,1,   0,0,0,0,-1),
+                # base/FPF for reference only / consistency check
+                "FPF con-lib true-rev"       = c(0,1,-1,0,0,  0,-1,1,0,0),
+                "baseline true-rev"          = c(1,0,0,0,0,  -1,0,0,0,0))  
+# taskcond2 varies fastest: 5 true then 5 rev cells
+```
+
+
+```{r contrast function}
+
+print_contrast = function(emm) {
+  # holm applied separately within each cue group
+  contrast_base    = summary(contrast(emm, method=taskcond2_list$base),    adjust=adjust, infer=TRUE)
+  contrast_within  = summary(contrast(emm, method=taskcond2_list$within),  adjust=adjust, infer=TRUE)
+  contrast_between = summary(contrast(emm, method=taskcond2_list$between), adjust=adjust, infer=TRUE)
+  # use infer=TRUE to include CI
+  
+  print(contrast_base)
+  print(contrast_within)
+  print(contrast_between)
+}
+
+```
+
+
+# sdt ~ task x cond
+
+```{r sdt contrast function}
+# formal modeling to test cshift 
+sdt_df
+
+levels(sdt_df$task)
+
+get_sdt_pairwise_df = function(dv,df) {
+  model = as.formula(paste(dv,"~ task0 * cond * cue + (1|subID)"))
+  lm = lmerTest::lmer(model, data = df)
+  emm = emmeans(lm, ~cond | task0*cue)
+  emm_df = data.frame(summary(emm, infer=TRUE)) %>%  
+    select(task0,cue,cond,emmean) %>% 
+    pivot_wider(names_from=cond, values_from=emmean)
+  
+  # canonical cshift [con-lib] within each group
+  pairs = pairs(emm, adjust=adjust)
+  shift_df = data.frame(summary(pairs, infer=TRUE)) %>%   # don't use as.data.frame()
+    mutate(d = data.frame(get_eff(lm, pairs))$effect.size) %>% 
+    merge(emm_df) %>% arrange(task0,cue) %>% 
+    mutate(t.ratio = round(t.ratio,2), 
+           p.value = round(p.value,4), 
+           idx = dv) %>% 
+    select(idx,task0,cue,Con,Lib,everything())
+  
+  # [con-lib] x [true-rev]
+  # [!!!] strategic row 
+  # base/FPF rows for reference only [consistency check]
+  cue_diff = contrast(emmeans(lm, ~cond*cue | task0), interaction="pairwise")
+  cue_diff_df = data.frame(summary(cue_diff, infer=TRUE)) %>% 
+    mutate(d = data.frame(get_eff(lm,cue_diff))$effect.size,
+           t.ratio = round(t.ratio,2), 
+           p.value = round(p.value,4), 
+           idx = dv)
+  
+  # holm doesn't do anything when only 1 contrast per task
+  
+  # full sample, averaged over cue; report base/FPF only
+  pooled = pairs(emmeans(lm, ~cond|task0), adjust=adjust)  
+  pooled_df = data.frame(summary(pooled, infer=TRUE)) %>% 
+    mutate(d = data.frame(get_eff(lm,pooled))$effect.size,
+           t.ratio = round(t.ratio,2), 
+           p.value = round(p.value,4), 
+           idx = dv) %>% 
+    filter(task0 !="Strategic")
+  
+  out = list(shift = shift_df, 
+             cue_diff = cue_diff_df, 
+             pooled = pooled_df)  
+  return(out)
+}
+```
+
+
+```{r sdt ~ taskcond by cue}
+da_out = get_sdt_pairwise_df(df = sdt_df, dv="da")
+c2_out = get_sdt_pairwise_df(df = sdt_df, dv="c2")
+
+# cshift
+cshift_lmer = lmerTest::lmer(cshift ~ task0*cue + (1|subID), data=cshift_df)
+cshift_emm  = emmeans(cshift_lmer, ~task0|cue)
+cshift_emm_df = data.frame(summary(cshift_emm, infer=TRUE)) %>% 
+  select(task0,cue,emmean) %>% 
+  pivot_wider(names_from=task0, values_from=emmean)
+
+# task comparison within each cue group
+cshift_pairs = pairs(cshift_emm, adjust=adjust)
+cshift_pairs_df = data.frame(summary(cshift_pairs, infer=TRUE)) %>% 
+  mutate(d = data.frame(get_eff(cshift_lmer, cshift_pairs))$effect.size) %>% 
+  merge(cshift_emm_df) %>% 
+  select(cue,Baseline,FPF,Strategic,everything()) %>% 
+  mutate(t.ratio = round(t.ratio,2), 
+         p.value = round(p.value,4))
+
+# true-rev per task
+cshift_cue = pairs(emmeans(cshift_lmer, ~cue|task0))
+cshift_cue_df = data.frame(summary(cshift_cue, infer=TRUE)) %>% 
+  mutate(d = data.frame(get_eff(cshift_lmer, cshift_cue))$effect.size,
+         t.ratio = round(t.ratio,2), 
+         p.value = round(p.value,4))
+
+# full sample base vs FPF only
+cshift_pooled = pairs(emmeans(cshift_lmer, ~task0), adjust=adjust)
+cshift_pooled_df = data.frame(summary(cshift_pooled, infer=TRUE)) %>% 
+  mutate(d = data.frame(get_eff(cshift_lmer,cshift_pooled))$effect.size,
+         t.ratio = round(t.ratio,2), 
+         p.value = round(p.value,4)) %>% 
+  filter(contrast == "Baseline - FPF")
+
+# print
+da_out$shift; da_out$cue_diff; da_out$pooled
+c2_out$shift; c2_out$cue_diff; c2_out$pooled
+cshift_pairs_df; cshift_cue_df; cshift_pooled_df
+
+```
+
+
+# plot c corr between tasks by cond 
+
+```{r c corr}
+c_wide = sdt_df %>% 
+  select(subID,cue_flip,task,cond,c2) %>% 
+  filter(task != "Baseline") %>% 
+  pivot_wider(names_from=task,values_from=c2) %>% 
+  mutate(Strategic = coalesce(StrategicTrue,StrategicReversed),
+         cue_flip_label = factor(cue_flip, levels=c(0,1), labels=c("True cue","Reversed cue"))) 
+
+c_corr_labels_noflip = c_wide %>% group_by(cond) %>% 
+  reframe(broom::tidy(cor.test(FPF, Strategic))) %>% 
+  mutate(n = parameter + 2,
+         label_p = sprintf("*r* = %.2f, *p* %s<br>*n* = %d", estimate,
+                           ifelse(p.value < .001, "< 0.001", sprintf("= %.3f", p.value)), n),
+         label_ci = sprintf("*r* = %.2f, 95%% CI [%.2f, %.2f] <br>*n* = %d", estimate, conf.low, conf.high, n))
+
+c_corr_labels_flip = c_wide %>% group_by(cue_flip_label,cond) %>% 
+  reframe(broom::tidy(cor.test(FPF, Strategic))) %>% 
+  mutate(n = parameter + 2,
+         label_p = sprintf("*r* = %.2f, *p* %s<br>*n* = %d", estimate,
+                           ifelse(p.value < .001, "< 0.001", sprintf("= %.3f", p.value)), n),
+         label_ci = sprintf("*r* = %.2f, 95%% CI [%.2f, %.2f] <br>*n* = %d", estimate, conf.low, conf.high, n))
+
+# get corr with CIs for output
+cor.test(~ FPF + Strategic, data = c_wide %>% filter(cond == "Con", cue_flip==0))
+cor.test(~ FPF + Strategic, data = c_wide %>% filter(cond == "Lib", cue_flip==0))
+cor.test(~ FPF + Strategic, data = c_wide %>% filter(cond == "Con", cue_flip==1))
+cor.test(~ FPF + Strategic, data = c_wide %>% filter(cond == "Lib", cue_flip==1))
+
+# plot corr - strategic combined
+p_cshift_noflip_corr = ggplot(c_wide, aes(x=Strategic,y=FPF)) +
+  facet_grid(rows=vars(cond)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(size=1,alpha = 0.7,shape=16) +
+  #ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+  ggtext::geom_richtext(data=c_corr_labels_noflip, 
+                        aes(x=min(c_wide$Strategic, na.rm=TRUE), y=max(c_wide$FPF, na.rm=TRUE), label=label_p),
+                        fill=NA, label.color=NA, halign=0,
+                        hjust=0, vjust=1, inherit.aes=FALSE, size=3) +
+  theme_bw() +
+  plot_annotation(tag_levels = "a")  # custom subplot labeling - this is one plot 
+p_cshift_noflip_corr
+
+# plot corr - by strategic cue flip
+p_cshift_flip_corr = ggplot(c_wide, aes(x=Strategic,y=FPF)) +
+  #facet_nested(cols=vars(cue_flip_label,cond)) +
+  facet_grid(rows=vars(cond),cols=vars(cue_flip_label)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(size=1,alpha=0.7,shape=16) +
+  #ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+  ggtext::geom_richtext(data=c_corr_labels_flip, 
+                       # aes(x=min(c_wide$Strategic, na.rm=TRUE), y=max(c_wide$FPF, na.rm=TRUE), label=label_p),
+                       aes(x=-Inf, y=Inf, label=label_p),
+                        fill=NA, label.color=NA, halign=0,
+                        hjust=0, vjust=1, inherit.aes=FALSE, size=3) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +
+  theme_bw(base_size=10) #+ plot_annotation(tag_levels = "a")  
+p_cshift_flip_corr
+
+if (isTRUE(save_fig)) {
+  #ggsave("../ggsave/c_corr_task_noflip.pdf",plot=p_cshift_noflip_corr,width=3, height=5, device=cairo_pdf)
+  ggsave("../ggsave/c_corr_task_flip.pdf",plot=p_cshift_flip_corr,width=5, height=5, device=cairo_pdf)
+}
+
+```
+
+
+# create cshift order
+```{r cshift order by strategic x cue flip}
+order_by_prob = cshift_df %>% filter(task0=="Strategic") %>% 
+  group_by(cue_flip) %>% 
+  select(subID,cshift) %>% 
+  arrange(cshift, .by_group=TRUE) %>% 
+  mutate(cshift_order_strategic = row_number(),  # resets automatically per group
+         cshift_order_strategic = as.factor(cshift_order_strategic)) %>% select(-cshift) 
+
+order_by_fpf = cshift_df %>% filter(task0=="FPF") %>% 
+  group_by(cue_flip) %>% 
+  select(subID,cshift) %>% 
+  arrange(cshift, .by_group=TRUE) %>% 
+  mutate(cshift_order_fpf = row_number(),  
+         cshift_order_fpf = as.factor(cshift_order_fpf)) %>% select(-cshift) 
+
+if (isTRUE(save_csv)) {
+  write.csv(order_by_prob,"../subj_summary/cshift_order.csv", row.names=FALSE)
+}
+
+sdt = sdt_df %>% 
+  merge(order_by_prob)  %>% merge(order_by_fpf)
+
+```
+
+# plot c by cshift order 
+
+```{r}
+conds_color_2 = c("#E69F00","#0072B2")  # con-lib
+conds_shape_2 = c("\u25B2", "\u25BC")   # up-down
+
+sdt_x = sdt %>% 
+  mutate(cshift_order_strategic = as.numeric(cshift_order_strategic),
+         cshift_order_fpf = as.numeric(cshift_order_fpf),
+         cue_flip = factor(cue_flip,labels=c("True cue","Reversed cue")))
+
+ggplot(sdt_x, aes(x=cshift_order_strategic, y=c2,color=cond,shape=cond)) +
+    facet_nested(cols=vars(cue_flip),rows=vars(task0),scales="free_x") +
+    geom_point(size=2,alpha=0.7) +
+    geom_smooth(method="lm", size=0.5, se=TRUE) +
+    geom_hline(yintercept=0, linetype=2) +
+    # scale_x_continuous(breaks=NULL) +
+    scale_shape_manual(values=conds_shape_2) +
+    scale_colour_manual(values=conds_color_2) +
+    theme_bw() +
+    labs(x="Participantrdered by strategic criterion shifting",y="Criterion",shape="Condition",color="Condition") +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_blank())  
+ggsave("../ggsave/c_subj_by_strategic.pdf", device=cairo_pdf)
+
+ggplot(sdt_x, aes(x=cshift_order_fpf, y=c2,color=cond,shape=cond)) +
+    facet_nested(cols=vars(cue_flip),rows=vars(task0),scales="free_x") +
+    geom_point(size=2,alpha=0.7) +
+    geom_smooth(method="lm", size=0.5, se=TRUE) +
+    geom_hline(yintercept=0, linetype=2) +
+    # scale_x_continuous(breaks=NULL) +
+    scale_shape_manual(values=conds_shape_2) +
+    scale_colour_manual(values=conds_color_2) +
+    theme_bw() +
+    labs(x="Participant",y="Criterion",shape="Condition",color="Condition") +
+    theme(panel.grid.major = element_blank(),
+          axis.text.x = element_blank())  +
+  plot_annotation(caption="Participants are rank-ordered by FPF criterion shifting within each cue group.")
+ggsave("../ggsave/c_subj_by_fpf.pdf", device=cairo_pdf)
+
+
+```
+
+
+# plot cshift corr between 3 tasks
+
+```{r cshift corr}
+sdt_cshift = cshift_df %>% merge(order_by_prob) 
+
+cshift_min = min(sdt_cshift$cshift) %>% plyr::round_any(.,0.1,floor)
+cshift_max = max(sdt_cshift$cshift) %>% plyr::round_any(.,0.1,ceiling)
+c(cshift_min,cshift_max)
+
+sdt_cshift_wide = sdt_cshift %>% select(subID,cue_flip,cshift_order_strategic,cshift,task0) %>% 
+  pivot_wider(names_from=task0,values_from=cshift) %>% 
+  mutate(cue_flip_label = factor(cue_flip, levels=c(0,1), labels=c("True cue","Reversed cue")))
+
+cor.test(~ Baseline + Strategic, data = sdt_cshift_wide %>% filter(cue_flip==0))
+cor.test(~ Baseline + Strategic, data = sdt_cshift_wide %>% filter(cue_flip==1))
+cor.test(sdt_cshift_wide$Baseline, sdt_cshift_wide$FPF)
+cor.test(~ FPF + Strategic, data = sdt_cshift_wide %>% filter(cue_flip==0))
+cor.test(~ FPF + Strategic, data = sdt_cshift_wide %>% filter(cue_flip==1))
+
+library(ppcor)
+with(sdt_cshift_wide %>% filter(cue_flip==0), ppcor::pcor.test(Strategic, FPF, Baseline))
+with(sdt_cshift_wide %>% filter(cue_flip==1), ppcor::pcor.test(Strategic, FPF, Baseline))
+
+# cor.test(sdt_cshift_wide$Baseline,sdt_cshift_wide$Strategic)
+# cor.test(sdt_cshift_wide$Baseline,sdt_cshift_wide$FPF)
+# cor.test(sdt_cshift_wide$FPF,sdt_cshift_wide$Strategic)
+# library(ppcor)
+# ppcor::pcor.test(sdt_cshift_wide$Strategic, sdt_cshift_wide$FPF, sdt_cshift_wide$Baseline)
+
+```
+
+
+```{r X plot corr - strategic combined - 3 figs, eval=FALSE}
+# p1 = ggplot(sdt_cshift_wide, aes(x = Baseline, y = FPF)) +
+#   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+#   geom_smooth(method='lm', se=TRUE) +
+#   geom_point(alpha = 0.7,shape=16) +
+#   ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+#   xlim(cshift_min,cshift_max) + ylim(cshift_min,cshift_max) +
+#   labs(
+#     x = "\u0394c Baseline",
+#     y = "\u0394c FPF",
+#   ) +
+#   theme_bw()
+# 
+# p2 = ggplot(sdt_cshift_wide, aes(x = Baseline, y = Strategic)) +
+#   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+#   geom_smooth(method='lm', se=TRUE) +
+#   geom_point(alpha = 0.7,shape=16) +
+#   ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+#   xlim(cshift_min,cshift_max) + ylim(cshift_min,cshift_max) +
+#   labs(
+#     x = "\u0394c Baseline",
+#     y = "\u0394c Strategic",
+#   ) +
+#   theme_bw()
+# 
+# p3 = ggplot(sdt_cshift_wide, aes(x = FPF, y = Strategic)) +
+#   geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+#   geom_smooth(method='lm', se=TRUE) +
+#   geom_point(alpha = 0.7,shape=16) +
+#   ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+#   xlim(cshift_min,cshift_max) + ylim(cshift_min,cshift_max) +
+#   labs(
+#     x = "\u0394c FPF",
+#     y = "\u0394c Strategic",
+#   ) +
+#   theme_bw()
+# 
+# p3_main = p3 + 
+#   scale_y_continuous(limits = NULL) + scale_x_continuous(limits = NULL) +  # do not limit scales
+#   plot_annotation(tag_levels=list("b"))  # custom subplot labeling
+# 
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/cshift_corr_main.pdf",plot=p3_main,width=4,height=4, device=cairo_pdf)
+# }
+# 
+# library(patchwork)
+# p1|p2|p3
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/cshift_corr_all.pdf",width=12,height=4, device=cairo_pdf)
+# }
+
+```
+
+
+```{r plot corr - strategic by cue flip - 5 figs}
+
+p1 = ggplot(sdt_cshift_wide, aes(x = Baseline, y = FPF)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(alpha = 0.7,shape=16) +
+  ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+  coord_cartesian(xlim = c(cshift_min, cshift_max),
+                  ylim = c(cshift_min, cshift_max)) +
+  labs(x = "\u0394c Baseline",
+       y = "\u0394c FPF",
+  ) +
+  theme_bw()
+
+p2 = ggplot(sdt_cshift_wide, aes(x = Baseline, y = Strategic)) +
+  facet_grid(cols=vars(cue_flip_label)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(alpha = 0.7,shape=16) +
+  ggpmisc::stat_correlation(mapping = use_label(c("R", "P", "n")), small.r=TRUE, small.p=TRUE) +
+  coord_cartesian(xlim = c(cshift_min, cshift_max),
+                  ylim = c(cshift_min, cshift_max)) +
+  labs(x = "\u0394c Baseline",
+       y = "\u0394c Strategic",
+  ) +
+  theme_bw()
+
+p3 = ggplot(sdt_cshift_wide, aes(x = Strategic, y = FPF)) +
+  facet_grid(cols=vars(cue_flip_label)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(size=1,alpha = 0.7,shape=16) +
+  # ggpmisc::stat_correlation(
+  #   mapping = aes(
+  #     # [!!!] `use_label` will cause parsing error for very small corr ("|r|<0.01");
+  #     # HARD CODE AROUND THIS:
+  #     label = after_stat(paste(ifelse(abs(cor) < 0.01 & cor != 0,
+  #                                     "italic(r)~`=`~\"0.00\"",
+  #                                     sprintf("italic(r)~`=`~\"%.2f\"", cor)),
+  #                              p.value.label, n.label,sep = "*\", \"*"))), 
+  #   small.r=TRUE, small.p=TRUE) +
+  coord_cartesian(xlim = c(cshift_min, cshift_max),
+                  ylim = c(cshift_min, cshift_max)) +
+  labs(x = "\u0394c Strategic",
+       y = "\u0394c FPF",
+  ) +
+  theme_bw(base_size=10) +
+  theme(strip.text = element_text(margin = margin(2,2,2,2)),
+        aspect.ratio = 1)
+
+cshift_corr_labels = sdt_cshift_wide %>% 
+  group_by(cue_flip_label) %>% 
+  reframe(broom::tidy(cor.test(FPF, Strategic))) %>% 
+  mutate(n = parameter + 2,
+         label_p = sprintf("*r* = %.2f, *p* %s<br>*n* = %d", estimate,
+                           ifelse(p.value < .001, "< 0.001", sprintf("= %.3f", p.value)), n),
+         label_ci = sprintf("*r* = %.2f, 95%% CI [%.2f, %.2f] <br>*n* = %d", estimate, conf.low, conf.high, n))
+
+p3 = p3 + 
+  # manual labels
+  ggtext::geom_richtext(
+    data=cshift_corr_labels, 
+    #aes(x=min(sdt_cshift_wide$Strategic, na.rm=TRUE), y=max(sdt_cshift_wide$FPF, na.rm=TRUE), label=label_p),
+    aes(x=-Inf, y=Inf, label=label_p),
+    fill=NA, label.color=NA, halign=0,
+    hjust=0, vjust=1, inherit.aes=FALSE, size=3) 
+  
+library(patchwork)
+p3_main = p3 + 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +  
+  scale_x_continuous(limits = NULL)
+  #scale_y_continuous(limits = NULL) + scale_x_continuous(limits = NULL) 
+
+if (isTRUE(save_fig)) {
+  ggsave("../ggsave/cshift_corr_main.pdf",plot=p3_main,
+         width=4.75, height=2.75, device=cairo_pdf)
+}
+
+```
+
+
+# confidence  
+
+**Using all trials**
+
+## all trials - clean data
+```{r clean up conf data}
+# order conf levels correctly 
+trials_conf = alltrials_df %>% filter(!is.na(conf)) %>% 
+  # reorder task/cond/conf levels 
+  mutate(task = relevel(factor(task), ref="Baseline"),  # baseline as reference
+         cond1 = case_when(task=="Baseline" & cond=="Con" ~ "Neutral1",
+                           task=="Baseline" & cond=="Lib" ~ "Neutral2",
+                           TRUE ~ cond),
+         taskcond1 = paste0(task,cond1),
+         taskcond1 = relevel(factor(taskcond1), ref="BaselineNeutral1"),
+         cond2 = case_when(task=="Baseline" ~ "Neutral",
+                           TRUE ~ cond),
+         cond2 = relevel(factor(cond2),ref="Neutral"),
+         taskcond2_4 = paste0(task,cond2),
+         taskcond2_4 = relevel(factor(taskcond2_4),ref="BaselineNeutral"),         
+         taskcond2 = factor(paste0(task0, cond2),
+                            levels = c("BaselineNeutral",
+                                       "FPFCon","FPFLib",
+                                       "StrategicCon","StrategicLib")),
+         conf = factor(conf, levels=c("low","med","high"), ordered=TRUE)) %>% 
+  # reset i_trial, keep baseline pooled 
+  mutate(i_trial0 = case_when(task!="Baseline" & i_trial>=101 ~ i_trial-100,
+                              TRUE ~ i_trial)) %>% 
+  # scale i_trial
+  group_by(taskcond2_4) %>% 
+  mutate(i_trial0 = as.numeric(scale(i_trial0))) %>% ungroup()
+
+trials_conf %>% count(task,i_trial) %>% count(task)
+
+trials_conf %>% group_by(taskcond2) %>% 
+  summarise(min=min(i_trial0),max=max(i_trial0),mean=mean(i_trial0),sd=sd(i_trial0)) 
+
+# check taskcond2 levels for contrast vectors 
+levels(trials_conf$taskcond2)
+
+levels(trials_conf$taskcond1)
+```
+
+
+## conf ~ task x cond 
+
+### clmm
+```{r X conf ~ taskcond clmm, eval=FALSE}
+# # conf by task
+# m1 = clmm(conf ~ task + (1|subID), data=trials_conf)
+# summary(m1)
+# emmeans(m1, pairwise ~ task, mode="latent")
+# 
+# # conf by taskcond, baseline neutral as reference
+# m2 = clmm(conf ~ taskcond2 + (1|subID), data=trials_conf)  
+# summary(m2)
+# emmeans(m2, pairwise ~ taskcond2, mode = "latent")
+# # USE THIS AS MAIN MODEL
+# print_contrast(emmeans(m2, ~taskcond2, mode="latent"))
+# 
+# # conf by taskcond with 2x2 interaction effect [remove baseline]
+# m2_interaction = clmm(conf ~ task*cond + (1|subID), data=trials_conf %>% filter(task!="Baseline"))  
+# summary(m2_interaction)
+# emmeans(m2_interaction, pairwise ~ task*cond, mode = "latent")
+# # FOR INTERACTION ONLY
+
+```
+
+
+```{r conf ~ taskcond clmm}
+# conf by task
+m1 = clmm(conf ~ task0*cue + (1|subID), data=trials_conf)
+summary(m1)
+emmeans(m1, pairwise ~ task0|cue, mode="latent", adjust=adjust)
+
+# conf by taskcond x cue, baseline neutral as reference
+m2 = clmm(conf ~ taskcond2*cue + (1|subID), data=trials_conf)
+summary(m2)
+# USE THIS AS MAIN MODEL
+print_contrast(emmeans(m2, ~taskcond2|cue, mode="latent"))  # within each group
+summary(contrast(emmeans(m2, ~taskcond2, mode="latent"), 
+                 method=taskcond2_list$base[1:2]), adjust=adjust, infer=TRUE)   # full sample FPF vs base
+summary(contrast(emmeans(m2, ~taskcond2, mode="latent"), 
+                 method=taskcond2_list$within[1]), adjust=adjust, infer=TRUE)   # full sample FPF con-lib
+summary(contrast(emmeans(m2, ~taskcond2*cue, mode="latent"), 
+                 method=cue_list[1:3]), adjust=adjust, infer=TRUE)   # strategic true-rev
+summary(contrast(emmeans(m2, ~taskcond2*cue, mode="latent"), 
+                 method=cue_list[4:5]), adjust="none", infer=TRUE)   # consistency check - check CIs
+
+# conf by taskcond with 2x2 interaction effect [remove baseline], within each group
+m2_interaction = clmm(conf ~ task0*cond*cue + (1|subID), 
+                      data=trials_conf %>% filter(task0!="Baseline"))
+summary(m2_interaction)
+contrast(emmeans(m2_interaction, ~cond*task0 | cue, mode="latent"), interaction="pairwise")
+# FOR INTERACTION ONLY
+
+```
+
+### plot P(highconf) by taskcond
+```{r conf ~ taskcond plot}
+# plot confidence by taskcond 
+
+# # continuous latent logit scale
+# m2.emm_logit = bind_rows(
+#   emmeans(m2, ~taskcond2 | cue, mode="latent") %>% as.data.frame() %>% 
+#     filter(str_detect(taskcond2,"Strategic")) %>% 
+#     mutate(task = paste0("Strategic",cue)),
+#   emmeans(m2, ~taskcond2, mode="latent") %>% as.data.frame() %>% 
+#     filter(!str_detect(taskcond2,"Strategic")) %>% 
+#     mutate(task = str_extract(taskcond2,"Baseline|FPF"))
+# ) %>% 
+#   mutate(cond = str_extract(taskcond2,"Con|Lib|Neutral"),
+#          task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed"))) %>% 
+#   arrange(task,cond) %>% 
+#   mutate(taskcond_label = fct_inorder(paste(task,cond,sep="\n")))
+# # m2.emm_logit = emmeans(m2, ~ taskcond2, mode = "latent") %>% as.data.frame() %>% 
+# #   mutate(taskcond_label = str_replace(taskcond2,"Lib","\nLib"),
+# #          taskcond_label = str_replace(taskcond_label,"Con","\nCon"),
+# #          taskcond_label = str_replace(taskcond_label,"Neutral","\nNeutral"))
+# 
+# ggplot(m2.emm_logit, aes(x = taskcond_label, y = emmean)) +
+#   geom_pointrange(aes(ymin = asymp.LCL, ymax = asymp.UCL)) +
+#   labs(y = "Confidence (logit scale)", x = "Task\nCondition") +
+#   theme_bw()
+# 
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/conf_logit_taskcond.pdf",height=4,width=6)
+# }
+
+# prob of highconf
+m2.emm.prob = bind_rows(
+  emmeans(m2, ~conf | taskcond2+cue, mode="prob") %>% as.data.frame() %>% 
+    filter(str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = paste0("Strategic",cue)),
+  emmeans(m2, ~conf | taskcond2, mode="prob") %>% as.data.frame() %>% 
+    filter(!str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = str_extract(taskcond2,"Baseline|FPF"))
+) %>% 
+  filter(conf=="3") %>% 
+  mutate(cond = str_extract(taskcond2,"Con|Lib|Neutral"),
+         task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed"))) %>% 
+  arrange(task,cond) %>% 
+  mutate(taskcond_label = forcats::fct_inorder(paste(task,cond,sep="\n")))  # by order of first appearance
+# m2.emm.prob = emmeans(m2, ~ conf|taskcond2, mode = "prob") %>% as.data.frame() %>% filter(conf=="3") %>% 
+#   mutate(taskcond_label = str_replace(taskcond2,"Lib","\nLib"),
+#          taskcond_label = str_replace(taskcond_label,"Con","\nCon"),
+#          taskcond_label = str_replace(taskcond_label,"Neutral","\nNeutral"))
+
+# ggplot(m2.emm.prob, aes(x = taskcond_label, y = prob)) +
+#   geom_pointrange(aes(ymin = asymp.LCL, ymax = asymp.UCL)) +
+#   labs(y = "P(high confidence)", x = "Task\nCondition") +
+#   theme_bw()
+# 
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/highconf_prob_taskcond.pdf",height=4,width=6)
+# }
+
+```
+
+## conf trajectory over time 
+**Using all trials**
+
+### clmm 
+```{r conf trajectory over time, group level taskcond}
+#trials_conf
+
+alltrials_conf = trials_conf
+
+# alltrials_conf = alltrials_df %>% filter(!is.na(conf)) %>% 
+#   # reorder task/cond/conf levels 
+#   mutate(task = factor(task, levels=c("Baseline","FPF","Strategic")),
+#          task = relevel(factor(task), ref="Baseline"),  # baseline as reference
+#          cond1 = case_when(task=="Baseline" & cond=="Con" ~ "Neutral1",
+#                            task=="Baseline" & cond=="Lib" ~ "Neutral2",
+#                            TRUE ~ cond),
+#          taskcond1 = paste0(task,cond1),
+#          taskcond1 = relevel(factor(taskcond1), ref="BaselineNeutral1"),
+#          
+#          cond2 = case_when(task=="Baseline" ~ "Neutral",
+#                            TRUE ~ cond),
+#          cond2 = relevel(factor(cond2),ref="Neutral"),
+#          taskcond2 = paste0(task,cond2),
+#          taskcond2 = relevel(factor(taskcond2),ref="BaselineNeutral"),
+#          conf = factor(conf, levels=c("low","med","high"), ordered=TRUE)) %>% 
+#   # reset i_trial, keep baseline pooled 
+#   mutate(i_trial0 = case_when(task!="Baseline" & i_trial>=101 ~ i_trial-100,
+#                               TRUE ~ i_trial)) %>% 
+#   # scale i_trial
+#   group_by(taskcond2) %>% 
+#   mutate(i_trial0 = as.numeric(scale(i_trial0))) %>% ungroup()
+
+alltrials_conf_reinforced = alltrials_conf %>% 
+  filter((task=="Baseline" & resp_type %in% c("hit","cr")) |
+           (task !="Baseline" & cond=="Lib" & resp_type %in% c("hit","fa")) |
+           (task !="Baseline" & cond=="Con" & resp_type %in% c("cr","miss")))
+
+# random intercept only 
+conf_over_time.m = clmm(conf ~ i_trial0*taskcond2*cue + (1|subID), data=alltrials_conf)  # long run time
+summary(conf_over_time.m)  # slope compared to baseline slope
+summary(emtrends(conf_over_time.m, ~taskcond2|cue, var="i_trial0"), infer=TRUE)
+summary(emtrends(conf_over_time.m, ~taskcond2, var="i_trial0"), infer=TRUE)   # full sample base/FPF
+print_contrast(emtrends(conf_over_time.m, ~taskcond2|cue, var="i_trial0"))
+#print_contrast(emtrends(conf_over_time.m, ~taskcond2, var="i_trial0"))
+summary(contrast(emtrends(conf_over_time.m, ~taskcond2, var="i_trial0"), 
+                 method=taskcond2_list$base[1:2]), adjust=adjust, infer=TRUE)  # full sample FPF vs base
+summary(contrast(emtrends(conf_over_time.m, ~taskcond2, var="i_trial0"), 
+                 method=taskcond2_list$within[1]), adjust=adjust, infer=TRUE)  # full sample FPF con-lib
+summary(contrast(emtrends(conf_over_time.m, ~taskcond2*cue, var="i_trial0"), 
+                 method=cue_list[1:3]), adjust=adjust, infer=TRUE) # strategic true-rev
+summary(contrast(emtrends(conf_over_time.m, ~taskcond2*cue, var="i_trial0"), 
+                 method=cue_list[4:5]), adjust="none", infer=TRUE) # for reference only
+
+# for reinforced direction answers only: lib-old, con-new, neutral-hit/cr
+conf_over_time_reinf.m = clmm(conf ~ i_trial0*taskcond2*cue + (1|subID), data=alltrials_conf_reinforced)
+summary(conf_over_time_reinf.m)
+summary(emtrends(conf_over_time_reinf.m, ~taskcond2|cue, var="i_trial0"), infer=TRUE)
+summary(emtrends(conf_over_time_reinf.m, ~taskcond2, var="i_trial0"), infer=TRUE)   # full sample base/FPF
+print_contrast(emtrends(conf_over_time_reinf.m, ~taskcond2|cue, var="i_trial0"))
+summary(contrast(emtrends(conf_over_time_reinf.m, ~taskcond2, var="i_trial0"), 
+                 method=taskcond2_list$base[1:2]), adjust=adjust, infer=TRUE)  # full sample FPF vs base
+summary(contrast(emtrends(conf_over_time_reinf.m, ~taskcond2, var="i_trial0"), 
+                 method=taskcond2_list$within[1]), adjust=adjust, infer=TRUE)  # full sample FPF con-lib
+summary(contrast(emtrends(conf_over_time_reinf.m, ~taskcond2*cue, var="i_trial0"), 
+                 method=cue_list[1:3]), adjust=adjust, infer=TRUE) # strategic true-rev
+summary(contrast(emtrends(conf_over_time_reinf.m, ~taskcond2*cue, var="i_trial0"), 
+                 method=cue_list[4:5]), adjust="none", infer=TRUE) # for reference only
+
+```
+
+```{r export model output, echo=FALSE}
+
+if (isTRUE(save_model)) {
+  capture.output(
+    summary(conf_over_time.m),
+    cat("\n\n====================\n"),
+    summary(conf_over_time_reinf.m),
+    cat("\n\n====================\n"),
+    file = "../models/conf_over_time.txt")
+}
+
+```
+
+
+### plot P(highconf) by taskcond x time
+```{r plot group level predicted P highconf trajectory}
+
+# # custom x-axis ticks for centered i_trial
+# break_props = seq(0,1,by=0.2)
+# break_pos   = sqrt(3) * (2*break_props - 1) 
+
+# all trials
+conf.emm = bind_rows(
+  emmeans(conf_over_time.m, ~conf | i_trial0+taskcond2+cue, mode="prob",
+          at = list(i_trial0 = seq(-1.72,1.72, length.out=9))) %>% as.data.frame() %>% 
+    filter(str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = paste0("Strategic",cue)),
+  
+  emmeans(conf_over_time.m, ~conf | i_trial0+taskcond2, mode="prob",
+          at = list(i_trial0 = seq(-1.72,1.72, length.out=9))) %>% as.data.frame() %>% 
+    filter(!str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = str_extract(taskcond2,"Baseline|FPF"))
+) %>% 
+  mutate(cond = str_extract(taskcond2,"Con|Lib|Neutral"),
+         task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed")))
+
+# conf.emm = emmeans(conf_over_time.m, ~conf|i_trial0+taskcond2, mode = "prob",
+#                    at = list(i_trial0 = seq(-1.72, 1.72, length.out=9))) %>% as.data.frame() %>% 
+#   mutate(task = case_when(str_detect(taskcond2,"Strategic") ~ "Strategic",
+#                           str_detect(taskcond2,"FPF") ~ "FPF",
+#                           str_detect(taskcond2,"Baseline") ~ "Baseline"),
+#          cond = case_when(str_detect(taskcond2,"Con") ~ "Con",
+#                           str_detect(taskcond2,"Lib") ~ "Lib",
+#                           str_detect(taskcond2,"Neutral") ~ "Neutral"),
+#          task = factor(task,levels=c("Baseline","FPF","Strategic")))
+
+# p_conf_full = conf.emm %>% filter(conf=="3") %>%
+#   ggplot(aes(x=i_trial0, y=prob)) +
+#   facet_nested(~ task+cond, 
+#                labeller=labeller(task=task_labels, cond=cond_labels)) +
+#   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.15, color = NA) +
+#   geom_line(linewidth = 0.7) +
+#   #geom_pointrange(data=conf_bins, aes(x=x, y=mean, ymin = mean-se, ymax = mean+se),size=0.2, inherit.aes = FALSE) +
+#   scale_x_continuous(breaks = break_pos,labels=break_props*100) +
+#   labs(x = "% trials completed", y = "P(high confidence)", subtitle="All trials") +
+#   theme_bw()
+# p_conf_full
+
+# for reinforced direction only
+conf_reinf.emm = bind_rows(
+  emmeans(conf_over_time_reinf.m, ~conf | i_trial0+taskcond2+cue, mode="prob",
+          at = list(i_trial0 = seq(-1.72,1.72, length.out=9))) %>% as.data.frame() %>% 
+    filter(str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = paste0("Strategic",cue)),
+  
+  emmeans(conf_over_time_reinf.m, ~conf | i_trial0+taskcond2, mode="prob",
+          at = list(i_trial0 = seq(-1.72,1.72, length.out=9))) %>% as.data.frame() %>% 
+    filter(!str_detect(taskcond2,"Strategic")) %>% 
+    mutate(task = str_extract(taskcond2,"Baseline|FPF"))
+) %>% 
+  mutate(cond = str_extract(taskcond2,"Con|Lib|Neutral"),
+         task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed"))) %>%
+  mutate(resptype = case_when(cond=="Con" ~ "CR & Miss",
+                              cond=="Lib" ~ "Hit & FA",
+                              cond=="Neutral" ~ "Hit & CR"))
+
+# conf_reinf.emm = emmeans(conf_over_time_reinf.m, ~conf|i_trial0+taskcond2, mode = "prob",
+#                          at = list(i_trial0 = seq(-1.72, 1.72, length.out=9))) %>% as.data.frame() %>% 
+#   mutate(task = case_when(str_detect(taskcond2,"Strategic") ~ "Strategic",
+#                           str_detect(taskcond2,"FPF") ~ "FPF",
+#                           str_detect(taskcond2,"Baseline") ~ "Baseline"),
+#          cond = case_when(str_detect(taskcond2,"Con") ~ "Con",
+#                           str_detect(taskcond2,"Lib") ~ "Lib",
+#                           str_detect(taskcond2,"Neutral") ~ "Neutral"),
+#          task = factor(task,levels=c("Baseline","FPF","Strategic"))) %>% 
+#   mutate(resptype = case_when(cond=="Con" ~ "CR & Miss",
+#                               cond=="Lib" ~ "Hit & FA",
+#                               cond=="Neutral" ~ "Hit & CR"))
+
+# p_conf_reinf = conf_reinf.emm %>% filter(conf=="3") %>%
+#   ggplot(aes(x = i_trial0, y = prob)) +
+#   facet_nested(~ task + cond + resptype,
+#                labeller = labeller(task = task_labels, cond = cond_labels)) +
+#   geom_ribbon(aes(ymin = asymp.LCL, ymax = asymp.UCL), alpha = 0.15, color = NA) +
+#   geom_line(linewidth = 0.7) +
+#   scale_x_continuous(breaks = break_pos,labels=break_props*100) +
+#   labs(x = "% trials completed", y = "P(high confidence)", subtitle="Condition-congruent trials") +
+#   theme_bw()
+# p_conf_reinf
+# 
+# # shared y range for both panels
+# ylim = range(c(conf.emm$asymp.LCL[conf.emm$conf=="3"], 
+#                conf.emm$asymp.UCL[conf.emm$conf=="3"],
+#                conf_reinf.emm$asymp.LCL[conf_reinf.emm$conf=="3"],
+#                conf_reinf.emm$asymp.UCL[conf_reinf.emm$conf=="3"]))
+# 
+# # combine both 
+# # | = horizontal, / = vertical
+# ((p_conf_full + coord_cartesian(ylim = ylim)) / (p_conf_reinf + coord_cartesian(ylim = ylim))) +
+#   plot_annotation(caption="Shaded areas represent 95% CI.",
+#                   theme = theme(plot.caption = element_text(size = 8, hjust = 1)),
+#                   tag_levels="a")
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/highconf_prob_trajectory_taskcond.pdf", width=11,height=8)
+# }
+
+```
+
+### supplementary - plain prop highconf by bins
+
+```{r X plot group level obesrved prop highconf trajectory, eval=FALSE}
+
+# observed p(highconf) x 10 bins over time
+# [!!!] descriptive only, put in supplemental figures 
+
+# get_conf_bins = function(df, bins=10) {
+#   df = df %>%   
+#     group_by(taskcond2_4) %>% 
+#     mutate(bin = cut(i_trial0, breaks = 10, labels = FALSE)) %>% 
+#     group_by(subID, taskcond2_4, bin) %>% 
+#     summarise(x = mean(i_trial0), 
+#               p_highconf = mean(conf=="high", na.rm=TRUE), 
+#               .groups = "drop") %>% 
+#     filter(!is.na(p_highconf)) %>% 
+#     # within subjects SE [!!!]
+#     group_by(subID, taskcond2_4) %>% 
+#     mutate(subj_mean = mean(p_highconf)) %>% 
+#     group_by(taskcond2_4) %>% 
+#     mutate(p_highconf_norm = p_highconf - subj_mean + mean(p_highconf)) %>% 
+#     group_by(taskcond2_4, bin) %>% 
+#     summarise(n = n(), 
+#               mean = mean(p_highconf), 
+#               se_between = sd(p_highconf)/sqrt(n),
+#               se_within  = sd(p_highconf_norm) * sqrt(bins/(bins-1)) / sqrt(n),
+#               .groups = "drop") %>% 
+#     mutate(prop = (bin-0.5) * 100/bins,   # bin midpoint for plotting
+#            task = str_extract(as.character(taskcond2_4),
+#                               "Baseline|FPF|StrategicTrue|StrategicReversed"),
+#            task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed")),
+#            cond = str_extract(as.character(taskcond2_4),"Con|Lib|Neutral"))
+#   
+#   return(df)
+# }
+# 
+# conf_obs = get_conf_bins(alltrials_conf)
+# conf_reinf_obs = get_conf_bins(alltrials_conf_reinforced) %>% 
+#   mutate(resptype = case_when(cond=="Con" ~ "CR & Miss",
+#                               cond=="Lib" ~ "Hit & FA",
+#                               cond=="Neutral" ~ "Hit & CR")) 
+# 
+# p_obs_full = ggplot(conf_obs, aes(x = prop, y = mean)) +
+#   facet_nested(~ task + cond) +
+#   geom_line(color = "gray60", linewidth = 0.4) +
+#   geom_pointrange(aes(ymin = mean - se_within, ymax = mean + se_within), size = 0.2) +
+#   scale_x_continuous(breaks = seq(0, 100, 20), limits = c(0, 100)) +
+#   labs(x = "% trials completed", y = "Prop. high confidence response", subtitle = "All trials") +
+#   theme_bw()
+# p_obs_full
+# 
+# p_obs_reinf = ggplot(conf_reinf_obs, aes(x = prop, y = mean)) +
+#   facet_nested(~ task + cond + resptype) +
+#   geom_line(color = "gray60", linewidth = 0.4) +
+#   geom_pointrange(aes(ymin = mean - se_within, ymax = mean + se_within), size = 0.2) +
+#   scale_x_continuous(breaks = seq(0, 100, 20), limits = c(0, 100)) +
+#   labs(x = "% trials completed", y = "Prop. high confidence response", subtitle = "Condition-congruent trials") +
+#   theme_bw()
+# p_obs_reinf
+# 
+# # shared y range for both panels
+# ylim_obs = range(c(conf_obs$mean - conf_obs$se_within, conf_obs$mean + conf_obs$se_within,
+#                    conf_reinf_obs$mean - conf_reinf_obs$se_within, conf_reinf_obs$mean + conf_reinf_obs$se_within))
+# 
+# # | = horizontal, / = vertical
+# ((p_obs_full + coord_cartesian(ylim = ylim_obs)) / 
+#     (p_obs_reinf + coord_cartesian(ylim = ylim_obs))) +
+#   plot_annotation(caption = "Error bars represent within-subjects SE (Morey, 2008).",
+#                   theme = theme(plot.caption = element_text(size = 8, hjust = 1)),
+#                   tag_levels = "a")
+# 
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/highconf_prop_observed_taskcond_5.pdf", width=11, height=8)
+# }
+
+```
+
+**NOTE:** `taskcond5` = baseline neutral1/neutral2 pooled; `taskcond6` = not pooled
+
+```{r baseline x2 plot group level obesrved prop highconf trajectory}
+
+# baseline blocks NOT pooled
+
+get_conf_bins_base2 = function(df, bins=10) {
+  df = df %>%   
+    group_by(taskcond1) %>% 
+    mutate(bin = cut(i_trial, breaks = 10, labels = FALSE)) %>% 
+    group_by(subID, taskcond1, bin) %>% 
+    summarise(x = mean(i_trial0), 
+              p_highconf = mean(conf=="high", na.rm=TRUE), 
+              .groups = "drop") %>% 
+    filter(!is.na(p_highconf)) %>% 
+    # within subjects SE [!!!]
+    group_by(subID, taskcond1) %>% 
+    mutate(subj_mean = mean(p_highconf)) %>% 
+    group_by(taskcond1) %>% 
+    mutate(p_highconf_norm = p_highconf - subj_mean + mean(p_highconf) ) %>% 
+    group_by(taskcond1, bin) %>% 
+    summarise(n = n(), 
+              mean = mean(p_highconf), 
+              se_between = sd(p_highconf)/sqrt(n),
+              se_within  = sd(p_highconf_norm) * sqrt(bins/(bins-1)) / sqrt(n),
+              .groups = "drop") %>% 
+    mutate(prop = (bin-0.5) * 100/bins,   # bin midpoint for plotting
+           task = str_extract(as.character(taskcond1),
+                              "Baseline|FPF|StrategicTrue|StrategicReversed"),
+           task = factor(task, levels=c("Baseline","FPF","StrategicTrue","StrategicReversed")),
+           cond = str_extract(as.character(taskcond1),"Con|Lib|Neutral1|Neutral2"))
+  
+  return(df)
+}
+
+# conf_obs       = get_conf_bins_base2(alltrials_conf)
+# conf_reinf_obs = get_conf_bins_base2(alltrials_conf_reinforced) %>% 
+#   mutate(resptype = case_when(cond=="Con" ~ "CR & Miss",
+#                               cond=="Lib" ~ "Hit & FA",
+#                               str_detect(cond,"Neutral") ~ "Hit & CR")) 
+# p_obs_full = ggplot(conf_obs, aes(x = prop, y = mean)) +
+#   #facet_grid(cols = vars(task, cond)) +
+#   facet_nested(~ task + cond) +
+#   geom_line(color = "gray60", linewidth = 0.4) +
+#   geom_pointrange(aes(ymin = mean - se_within, ymax = mean + se_within), size = 0.2) +
+#   scale_x_continuous(breaks = seq(0, 100, 20), limits = c(0, 100)) +
+#   labs(x = "% trials completed", y = "Prop. high confidence response", subtitle = "All trials") +
+#   theme_bw()
+# p_obs_full
+# 
+# p_obs_reinf = ggplot(conf_reinf_obs, aes(x = prop, y = mean)) +
+#   facet_nested(~ task + cond + resptype) +
+#   geom_line(color = "gray60", linewidth = 0.4) +
+#   geom_pointrange(aes(ymin = mean - se_within, ymax = mean + se_within), size = 0.2) +
+#   scale_x_continuous(breaks = seq(0, 100, 20), limits = c(0, 100)) +
+#   labs(x = "% trials completed", y = "Prop. high confidence response", subtitle = "Condition-congruent trials") +
+#   theme_bw()
+# p_obs_reinf
+# 
+# # shared y range for both panels
+# ylim_obs = range(c(conf_obs$mean - conf_obs$se_within, conf_obs$mean + conf_obs$se_within,
+#                    conf_reinf_obs$mean - conf_reinf_obs$se_within, conf_reinf_obs$mean + conf_reinf_obs$se_within))
+# 
+# # | = horizontal, / = vertical
+# ((p_obs_full + coord_cartesian(ylim = ylim_obs)) / 
+#     (p_obs_reinf + coord_cartesian(ylim = ylim_obs))) +
+#   plot_annotation(caption = "Error bars represent within-subjects SE (Morey, 2008).",
+#                   theme = theme(plot.caption = element_text(size = 8, hjust = 1)),
+#                   tag_levels = "a")
+# 
+# if (isTRUE(save_fig)) {
+#   ggsave("../ggsave/highconf_prop_observed_taskcond_6.pdf", width=12, height=8)
+# }
+
+```
+
+
+```{r plot predicted + observed P highconf trajectory, baseline NOT pooled}
+
+conf.emm6 = conf.emm %>% filter(conf=="3") %>% 
+  mutate(prop = round((i_trial0/sqrt(3) + 1)/2 * 100, 6))
+conf.emm6 = bind_rows(
+  conf.emm6 %>% filter(cond!="Neutral"),
+  conf.emm6 %>% filter(cond=="Neutral", prop<=50) %>% 
+    mutate(cond="Neutral1", 
+           prop=prop*2),
+  conf.emm6 %>% filter(cond=="Neutral", prop>=50) %>% 
+    mutate(cond="Neutral2", 
+           prop=(prop-50)*2))
+
+conf_reinf.emm6 = conf_reinf.emm %>% filter(conf=="3") %>% 
+  mutate(prop = round((i_trial0/sqrt(3) + 1)/2 * 100, 6))
+conf_reinf.emm6 = bind_rows(
+  conf_reinf.emm6 %>% filter(cond!="Neutral"),
+  conf_reinf.emm6 %>% filter(cond=="Neutral", prop<=50) %>% 
+    mutate(cond="Neutral1", 
+           prop=prop*2),
+  conf_reinf.emm6 %>% filter(cond=="Neutral", prop>=50) %>% 
+    mutate(cond="Neutral2", 
+           prop=(prop-50)*2))
+
+# prob vs prop label text 
+legend_prob = "Predicted probabilities (95% CI)"
+legend_obs  = "Observed proportions (within-subjects SE)"
+
+# observed bins, baseline not pooled [recomputed here so it doesn't depend on chunk order]
+conf_obs6 = get_conf_bins_base2(alltrials_conf)
+conf_reinf_obs6 = get_conf_bins_base2(alltrials_conf_reinforced) %>% 
+  mutate(resptype = case_when(cond=="Con" ~ "CR & Miss",
+                              cond=="Lib" ~ "Hit & FA",
+                              str_detect(cond,"Neutral") ~ "Hit & CR"))
+
+p_layer_full = ggplot(conf.emm6, aes(x=prop, y=prob)) +
+  facet_nested(~ task+cond,
+               labeller=labeller(task=task_labels, cond=cond_labels)) +
+  geom_ribbon(aes(ymin=asymp.LCL, ymax=asymp.UCL, fill=legend_prob), alpha=0.1, color=NA) +
+  geom_line(aes(linetype=legend_prob), linewidth=0.5) +
+  geom_pointrange(data=conf_obs6, aes(x=prop, y=mean, 
+                                      ymin=mean-se_within, ymax=mean+se_within, 
+                                      shape=legend_obs),
+                  size=0.07, linewidth=0.3, color="gray40", inherit.aes=FALSE) +
+  scale_fill_manual(values="grey20", name=NULL) +      # same as default ribbon fill
+  scale_linetype_manual(values="solid", name=NULL) +
+  scale_shape_manual(values=19, name=NULL) +  
+  scale_x_continuous(breaks=seq(0,100,20), limits=c(0,100)) +
+  labs(x="% trials completed", y="P(high confidence)", subtitle="All trials") +
+  theme_bw(base_size=10) +
+  theme(panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))
+
+p_layer_reinf = ggplot(conf_reinf.emm6, aes(x=prop, y=prob)) +
+  facet_nested(~ task+cond+resptype,
+               labeller=labeller(task=task_labels, cond=cond_labels)) +
+  geom_ribbon(aes(ymin=asymp.LCL, ymax=asymp.UCL, fill=legend_prob), alpha=0.1, color=NA) +
+  geom_line(aes(linetype=legend_prob), linewidth=0.5) +
+  geom_pointrange(data=conf_reinf_obs6, aes(x=prop, y=mean, 
+                                            ymin=mean-se_within, ymax=mean+se_within, 
+                                            shape=legend_obs),
+                  size=0.07, linewidth=0.3, color="gray40", inherit.aes=FALSE) +
+  scale_fill_manual(values="grey20", name=NULL) +      # same as default ribbon fill
+  scale_linetype_manual(values="solid", name=NULL) +
+  scale_shape_manual(values=19, name=NULL) +  
+  scale_x_continuous(breaks=seq(0,100,20), limits=c(0,100)) +
+  labs(x="% trials completed", y="P(high confidence)", subtitle="Condition-congruent trials") +
+  theme_bw(base_size=10) +
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(margin = margin(2,2,2,2)),
+        axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))
+
+# shared y range across model CIs and observed SEs
+ylim6 = range(c(conf.emm6$asymp.LCL, conf.emm6$asymp.UCL,
+                conf_reinf.emm6$asymp.LCL, conf_reinf.emm6$asymp.UCL,
+                conf_obs6$mean-conf_obs6$se_within, conf_obs6$mean+conf_obs6$se_within,
+                conf_reinf_obs6$mean-conf_reinf_obs6$se_within, conf_reinf_obs6$mean+conf_reinf_obs6$se_within))
+
+((p_layer_full + coord_cartesian(ylim = ylim6)) /
+    (p_layer_reinf + coord_cartesian(ylim = ylim6))) +
+  plot_layout(guides="collect") +
+  plot_annotation(tag_levels="a") &
+  theme(legend.position="bottom")
+
+if (isTRUE(save_fig)) {
+  ggsave("../ggsave/highconf_prob_trajectory_layered.pdf", width=9, height=5.5, #width=12, height=8,
+         device=cairo_pdf)
+}
+
+```
+
+
+## individual conf trajectory slope 
+
+### get individual slopes 
+```{r conf trajectory slope individiual}
+
+# check cell size 
+#trials_conf_reinforced %>% count(subID, taskcond2) %>%
+#  group_by(taskcond2) %>% summarise(min_n = min(n), median_n = median(n))
+
+taskcond_cells = unique(alltrials_conf_reinforced$taskcond2_4)
+conf_slope_list = list()
+
+for (i in 1:length(taskcond_cells)) {
+  this_taskcond = taskcond_cells[i]
+  df = alltrials_conf_reinforced %>% filter(taskcond2_4==this_taskcond)
+  model = clmm(conf ~ i_trial0 + (i_trial0 | subID), data=df)  # MODEL RANDOM SLOPES 
+  
+  subj_ranef = ranef(model)$subID  # random intercepts & i_trial slopes [2 columns!!]
+  trial_slope_fixed = model$beta["i_trial0"]  # fixed (group) i_trial slope
+  subj_slope = trial_slope_fixed + subj_ranef[,"i_trial0"]  # subj random slope total 
+  
+  conf_slope_list[[i]] = data.frame(subID = rownames(subj_ranef),
+                                    taskcond2 = this_taskcond, 
+                                    subj_slope = subj_slope)
+  
+}
+
+conf_slope_all = bind_rows(conf_slope_list)
+conf_slope_all
+
+```
+
+### conf slope ~ cshift
+```{r conf slope ~ cshift}
+
+sdt_df
+cshift_df
+
+c_base = sdt_base_df %>% select(subID,task,da,c2) %>% 
+  mutate(cond="Neutral",
+         taskcond2="BaselineNeutral")
+c_nobase = sdt_df %>% filter(task!="Baseline") %>% select(subID,task,cond,da,c2) %>% 
+  mutate(taskcond2 = paste0(task,cond))
+c_taskcond5 = bind_rows(c_base,c_nobase) %>% 
+  mutate(taskcond2 = relevel(factor(taskcond2), ref="BaselineNeutral")) %>% 
+  arrange(subID,taskcond2) 
+
+conf_c = merge(conf_slope_all,c_taskcond5,by=c("subID","taskcond2")) %>% 
+  select(subID,taskcond2,c2,subj_slope,task,cond) 
+
+conf_corr = conf_c %>%
+  filter(!is.na(c2), !is.na(subj_slope)) %>%
+  group_by(task,cond) %>%
+  reframe(broom::tidy(cor.test(c2, subj_slope))) %>%
+  mutate(p_adj = p.adjust(p.value, method = "fdr"),
+         n = parameter + 2,
+         #label = sprintf("*r* = %.2f, *p*<sub>adj</sub> = %.3f, *n* = %d", estimate, p_adj, n),
+label = sprintf("*r* = %.2f, 95%% CI [%.2f, %.2f]<br>*n* = %d", 
+                estimate, conf.low, conf.high, n))
+conf_corr %>% select(task, cond, estimate, conf.low, conf.high, p.value, p_adj)   # print output in html
+
+# corrplot
+ggplot(conf_c, aes(x=c2, y=subj_slope)) +
+  #facet_nested(~task+cond, labeller = labeller(task = task_labels, cond = cond_labels)) +
+  # facet_nested_wrap(vars(task, cond), ncol = 3, 
+  #                   labeller = labeller(task = task_labels, cond = cond_labels)) +
+ggh4x::facet_manual(vars(task,cond), design = "A#\nBC\nDE\nFG",
+                    strip = ggh4x::strip_nested(),
+                    labeller = labeller(task = task_labels, cond = cond_labels)) +
+  geom_hline(yintercept=0, linetype="dashed", color="lightgray") +
+  geom_vline(xintercept=0, linetype="dashed", color="lightgray") +
+  geom_smooth(method='lm', se=TRUE, linewidth=0.6) +
+  geom_point(size=1,alpha=0.7, shape=16) +
+  #ggpmisc::stat_correlation(mapping = use_label(c("R","P","n")), small.r=TRUE, small.p=TRUE) +
+  ggtext::geom_richtext(data=conf_corr, 
+                        #aes(x=min(conf_c$c2, na.rm=TRUE), y=max(conf_c$subj_slope, na.rm=TRUE), label=label),
+                        aes(x=-Inf, y=Inf, label=label),
+                        fill=NA, label.color=NA, halign=0,
+                        hjust=0, vjust=1, inherit.aes=FALSE,size=3) +
+  #scale_y_continuous(expand = expansion(mult = c(0.05, 0.3))) +
+  labs(x = "Criterion", y = expression("Participant confidence slope (" * italic(b) * ")")) +
+  theme_bw(base_size=10) +
+  theme(strip.text = element_text(margin = margin(2,2,2,2)),
+      aspect.ratio = 1)
+  
+
+if (isTRUE(save_fig)) {
+  #ggsave("../ggsave/confslope_corr_c.pdf", width=14, height=3, device=cairo_pdf)
+  ggsave("../ggsave/confslope_corr_c.pdf", width=4, height=8.5, device=cairo_pdf)
+}
+
+```
+
+
